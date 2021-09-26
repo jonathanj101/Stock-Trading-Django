@@ -1,7 +1,8 @@
 import React from "react";
 import { Nav, Navbar, Container } from "react-bootstrap";
 
-const Navigation = () => {
+const Navigation = ({ isLogged }) => {
+
     return (
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -11,8 +12,13 @@ const Navigation = () => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link href="#about">About</Nav.Link>
-                            <Nav.Link href="#summary">Summary</Nav.Link>
-                            <Nav.Link href="#account">Account</Nav.Link>
+                            {isLogged
+                                ? <div>
+                                    <Nav.Link href="#summary">Summary</Nav.Link>
+                                    <Nav.Link href="#account">Account</Nav.Link></div>
+                                : <div>
+                                    <Nav.Link>Log In</Nav.Link>
+                                </div>}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
