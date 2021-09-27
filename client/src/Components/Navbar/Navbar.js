@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Nav, Navbar, Container } from "react-bootstrap";
+import LogInModal from "../User-Auth/Log-In/LogInModal";
 
 const Navigation = ({ isLogged }) => {
+    const [show, setShow] = useState(false)
+
+    const handleClose = () => {
+        setShow(false)
+    }
 
     return (
         <div>
+            <LogInModal show={show} handleClose={handleClose} />
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                    <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
@@ -17,7 +24,7 @@ const Navigation = ({ isLogged }) => {
                                     <Nav.Link href="#summary">Summary</Nav.Link>
                                     <Nav.Link href="#account">Account</Nav.Link></div>
                                 : <div>
-                                    <Nav.Link>Log In</Nav.Link>
+                                    <Nav.Link onClick={() => setShow(true)}>Log In</Nav.Link>
                                 </div>}
                         </Nav>
                     </Navbar.Collapse>
