@@ -1,7 +1,10 @@
 import React, { Component } from "react"
 import "./App.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom"
 import Navigation from "./Components/Navbar/Navbar";
 import Home from "./Components/Pages/Home";
+import PageNotFound from "./Components/PageNotFound";
+import Registration from "./Components/User-Auth/Registration/Registration"
 
 class App extends Component {
   constructor(props) {
@@ -12,6 +15,10 @@ class App extends Component {
       userHoldings: '',
       isLogged: false
     }
+    this.handleLogOut = this.handleLogOut.bind(this);
+    this.handleLogIn = this.handleLogIn.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
+    this.isUserAuthenticated = this.isUserAuthenticated.bind(this);
   }
 
   //   async componentDidMount() {
@@ -97,10 +104,18 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" >
-        <Navigation isLogged={this.state.isLogged} />
-        <Home />
-      </div>
+      <BrowserRouter >
+        <div className="App" >
+          <Navigation isLogged={this.state.isLogged} />
+          <Switch>
+            <Route path="/" exact render={() => { <Home /> }} />
+            {/* <ProtectRoute exact path="/summary" component={()=><Summary />} /> */}
+            {/* <ProtectRoute exact path="/account" component={()=> <Report/>} /> */}
+            <Route path="/register" exact render={() => <Registration />} />
+            <Route path="*" component={() => <PageNotFound />} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     )
   }
 }
