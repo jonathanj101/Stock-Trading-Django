@@ -33,7 +33,7 @@ const LogInModal = ({ show, handleClose }) => {
         setShowAlertMsg(false);
     };
 
-    const redirectToAccountPage = (usersId, responseDataUsername) => {
+    const redirectToAccountPage = () => {
         setTimeout(() => {
             clearForm();
             // handleLogIn(usersId, responseDataUsername);
