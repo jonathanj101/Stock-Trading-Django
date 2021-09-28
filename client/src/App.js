@@ -5,6 +5,8 @@ import Navigation from "./Components/Navbar/Navbar";
 import Home from "./Components/Pages/Home";
 import PageNotFound from "./Components/PageNotFound";
 import Registration from "./Components/User-Auth/Registration/Registration"
+import Footer from "./Components/Footer";
+import SearchComponent from "./Components/Search-Component/SearchComponent";
 
 class App extends Component {
   constructor(props) {
@@ -107,13 +109,13 @@ class App extends Component {
       <BrowserRouter >
         <div className="App" >
           <Navigation isLogged={this.state.isLogged} />
+          <SearchComponent />
           <Switch>
             <Route path="/" exact render={() => { <Home /> }} />
-            {/* <ProtectRoute exact path="/summary" component={()=><Summary />} /> */}
-            {/* <ProtectRoute exact path="/account" component={()=> <Report/>} /> */}
             <Route path="/register" exact render={() => <Registration />} />
             <Route path="*" component={() => <PageNotFound />} />
           </Switch>
+          <Footer />
         </div>
       </BrowserRouter>
     )
