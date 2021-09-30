@@ -92,7 +92,7 @@ const FormComponent = ({ handleRegister }) => {
                 errorMessage={errorMessage}
                 successMessage={successMessage}
             />
-            <div>
+            <div style={{ border: "2px solid red", margin: "10% auto" }}>
                 <Form
                     id="registration-form"
                     noValidate
@@ -101,25 +101,31 @@ const FormComponent = ({ handleRegister }) => {
                         handleSubmit(e);
                     }}
                     method="POST"
+                    style={{ border: "2px solid black", width: "50%", margin: "auto", textAlign: "center" }}
 
                 >
                     <div
                         id="registration-form-title-container"
+                        style={{ margin: "25px" }}
 
                     >
-                        <span
+                        <p
+                            style={{ fontSize: "2rem", width: "fit-content", margin: "auto", borderBottom: "3px solid lightblue" }}
                             id="registration-form-title"
 
                         >
                             Create an account
-                        </span>
+                        </p>
                     </div>
-                    <Form.Row id="form-row">
+                    <Form.Row id="form-row" style={{ justifyContent: "space-evenly", border: "2px solid red", margin: "auto" }}>
                         <Form.Group
                             controlId="firstName"
+                            style={{ padding: "2% 0" }}
                         >
                             <Form.Control
                                 required
+                                htmlSize="50"
+                                style={{ padding: "2% 0" }}
                                 type="text"
                                 placeholder="First name"
                                 onChange={(e) => setFirstName(e.target.value)}
@@ -141,10 +147,13 @@ const FormComponent = ({ handleRegister }) => {
                         </Form.Group>
                         <Form.Group
                             controlId="lastName"
+                            style={{ padding: "2% 0" }}
 
                         >
                             <Form.Control
                                 required
+                                style={{ padding: "2% 0" }}
+                                htmlSize="50"
                                 type="text"
                                 placeholder="Last name"
                                 onChange={(e) => setLastName(e.target.value)}
@@ -164,17 +173,16 @@ const FormComponent = ({ handleRegister }) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row id="form-row-email" >
+                    <Form.Row id="form-row-email" style={{ border: "2px solid purple", margin: "auto", justifyContent: "center" }} >
                         <Form.Group
                             className="email"
                             controlId="email"
-
-                            as={Col}
-                            sm="12"
-                            md="12"
+                            style={{ padding: "2% 0" }}
                         >
                             <Form.Control
                                 required
+                                style={{ padding: "1% 0" }}
+                                htmlSize="115"
                                 type="email"
                                 placeholder="E-mail"
                                 onChange={(e) => setEmail(e.target.value)}
@@ -195,12 +203,15 @@ const FormComponent = ({ handleRegister }) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row id="form-row" >
+                    <Form.Row id="form-row" style={{ border: "2px solid red", margin: "auto", justifyContent: "space-evenly" }} >
                         <Form.Group
                             controlId="username"
+                            style={{ padding: "2% 0" }}
                         >
                             <Form.Control
                                 onChange={(e) => setUsername(e.target.value)}
+                                style={{ padding: "2% 0" }}
+                                htmlSize="50"
                                 type="text"
                                 placeholder="Username"
                                 name="username"
@@ -222,10 +233,13 @@ const FormComponent = ({ handleRegister }) => {
                         </Form.Group>
                         <Form.Group
                             controlId="password"
+                            style={{ padding: "2% 0" }}
 
                         >
                             <Form.Control
                                 onChange={(e) => setPassword(e.target.value)}
+                                style={{ padding: "2% 0" }}
+                                htmlSize="50"
                                 name="password"
                                 value={password}
                                 type="password"
@@ -245,7 +259,7 @@ const FormComponent = ({ handleRegister }) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <div >
+                    <div style={{ margin: "5% auto" }}>
                         <Button
                             id="submit-registration"
                             type="submit"
