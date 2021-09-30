@@ -127,7 +127,7 @@ const LogInModal = ({ show, handleClose }) => {
                     </Button>
                     <div className="mt-5 d-flex ">
                         <p>Don't have an account?</p>
-                        <Link className="ml-3" to="/register">
+                        <Link onClick={handleClose} className="ml-3" to="/register">
                             Register here
                         </Link>
                     </div>
