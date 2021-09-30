@@ -109,7 +109,6 @@ class App extends Component {
       <BrowserRouter >
         <div className="App" >
           <Navigation isLogged={this.state.isLogged} />
-          <SearchComponent />
           <Switch>
             <Route path="/" exact render={() => { <Home /> }} />
             <Route path="/register" exact render={() => <Registration />} />
