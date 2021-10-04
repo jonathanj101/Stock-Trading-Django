@@ -31,6 +31,7 @@ const FormComponent = ({ handleRegister }) => {
                 username,
                 email,
             );
+            clearForm();
         }
     };
 
@@ -42,11 +43,10 @@ const FormComponent = ({ handleRegister }) => {
         setEmail('');
     };
 
-    const redirectToAccountPage = (userId, username) => {
+    const redirectToAccountPage = (username) => {
         setTimeout(() => {
-            handleRegister(userId, username);
-            history.push('/my-stocks');
-            clearForm();
+            handleRegister(username);
+            history.push('/');
         }, 3000);
     };
 
@@ -57,27 +57,36 @@ const FormComponent = ({ handleRegister }) => {
         username,
         email,
     ) => {
+        debugger
         try {
-            const response = await axios.post('/signup', {
-                first_name: firstName,
-                last_name: lastName,
+            const response = await axios.put("http://127.0.0.1:8000/api/signup", {
+                firstName: firstName,
+                lastName: lastName,
                 password: password,
                 username: username,
                 email: email,
                 userHoldings: 100000,
             });
+            console.log(response)
             setShow(true);
-            const message = response.data[0];
-            const statusCode = response.data[1];
-            const responseUserId = response.data[2];
-            const responseUsername = response.data[3];
+            const statusCode = response.data.status_code;
+            const message = response.data.message;
 
-            if (statusCode >= 500) {
-                setErrorMessage(message);
-            } else {
-                localStorage.setItem('userId', JSON.stringify(responseUserId));
+            if (statusCode <= 201) {
+                const response = await axios.post("http://127.0.0.1:8000/api/signup", {
+                    firstName: firstName,
+                    lastName: lastName,
+                    password: password,
+                    username: username,
+                    email: email,
+                    userHoldings: 100000,
+                })
+                localStorage.setItem('username', JSON.stringify(username));
                 setSuccessMessage(message);
-                redirectToAccountPage(responseUserId, responseUsername);
+                redirectToAccountPage(username);
+                
+            } else {
+                setErrorMessage(message);
             }
         } catch (err) {
             console.log(err);
@@ -92,7 +101,7 @@ const FormComponent = ({ handleRegister }) => {
                 errorMessage={errorMessage}
                 successMessage={successMessage}
             />
-            <div style={{ border: "2px solid red", margin: "10% auto" }}>
+            <div style={{  margin: "10% auto" }}>
                 <Form
                     id="registration-form"
                     noValidate
@@ -101,7 +110,7 @@ const FormComponent = ({ handleRegister }) => {
                         handleSubmit(e);
                     }}
                     method="POST"
-                    style={{ border: "2px solid black", width: "50%", margin: "auto", textAlign: "center" }}
+                    style={{ width: "50%", margin: "auto", textAlign: "center", boxShadow: "rgb(179 178 178) 6px 32px 144px" }}
 
                 >
                     <div
@@ -110,14 +119,14 @@ const FormComponent = ({ handleRegister }) => {
 
                     >
                         <p
-                            style={{ fontSize: "2rem", width: "fit-content", margin: "auto", borderBottom: "3px solid lightblue" }}
+                            style={{ fontSize: "2rem",  margin: "auto", }}
                             id="registration-form-title"
 
                         >
                             Create an account
                         </p>
                     </div>
-                    <Form.Row id="form-row" style={{ justifyContent: "space-evenly", border: "2px solid red", margin: "auto" }}>
+                    <Form.Row id="form-row" style={{ justifyContent: "space-evenly",  margin: "auto" }}>
                         <Form.Group
                             controlId="firstName"
                             style={{ padding: "2% 0" }}
@@ -173,7 +182,7 @@ const FormComponent = ({ handleRegister }) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row id="form-row-email" style={{ border: "2px solid purple", margin: "auto", justifyContent: "center" }} >
+                    <Form.Row id="form-row-email" style={{  margin: "auto", justifyContent: "center" }} >
                         <Form.Group
                             className="email"
                             controlId="email"
@@ -203,7 +212,7 @@ const FormComponent = ({ handleRegister }) => {
                             </Form.Control.Feedback>
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row id="form-row" style={{ border: "2px solid red", margin: "auto", justifyContent: "space-evenly" }} >
+                    <Form.Row id="form-row" style={{  margin: "auto", justifyContent: "space-evenly" }} >
                         <Form.Group
                             controlId="username"
                             style={{ padding: "2% 0" }}
@@ -261,8 +270,10 @@ const FormComponent = ({ handleRegister }) => {
                     </Form.Row>
                     <div style={{ margin: "5% auto" }}>
                         <Button
-                            id="submit-registration"
+                            id="submit-registration-btn"
                             type="submit"
+                            block
+                            style={{width: "50%", margin: "auto"}}
 
                         >
                             Submit
