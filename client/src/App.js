@@ -6,7 +6,6 @@ import Home from "./Components/Pages/Home";
 import PageNotFound from "./Components/PageNotFound";
 import Registration from "./Components/User-Auth/Registration/Registration"
 import Footer from "./Components/Footer";
-import SearchComponent from "./Components/Search-Component/SearchComponent";
 
 class App extends Component {
   constructor(props) {
@@ -108,7 +107,7 @@ class App extends Component {
         <div className="App" >
           <Navigation isLogged={this.state.isLogged} />
           <Switch>
-            <Route path="/" exact render={() => { <Home /> }} />
+            <Route path="/" exact render={() => <Home /> } />
             <Route path="/register" exact render={() => <Registration handleRegister={this.handleRegister} />} />
             <Route path="*" component={() => <PageNotFound />} />
           </Switch>
