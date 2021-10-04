@@ -2,11 +2,11 @@ import React from 'react'
 
 const Footer = () => {
     return (
-        <div id="footer">
-            <div id="container">
+        <div id="footer" style={{ backgroundColor: "#343a40", width: "100%", height: "100vh" }}>
+            <div id="container" style={{ textAlign: "center" }}>
                 <div id="column-div">
                     <div>
-                        <p>Social</p>
+                        <p style={{ color: "white" }}>Social</p>
                     </div>
                     <div id="row-items">
                         <a
@@ -17,9 +17,9 @@ const Footer = () => {
                         </a>
                     </div>
                 </div>
-            </div>
-            <div id="author-div">
-                <a href="https://www.jonathanjimenez.tech">@Jonathan J || Full Stack Developer</a>
+                <div id="author-div" style={{ margin: "50px auto" }}>
+                    <a href="https://www.jonathanjimenez.tech">@Jonathan J || Full Stack Developer</a>
+                </div>
             </div>
         </div>
     )
