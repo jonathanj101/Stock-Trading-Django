@@ -13,7 +13,6 @@ class App extends Component {
     super(props)
     this.state = {
       username: '',
-      userId: '',
       userHoldings: '',
       isLogged: false
     }
@@ -63,7 +62,7 @@ class App extends Component {
   // }
 
   isUserAuthenticated = () => {
-    const localStorageUserId = JSON.parse(localStorage.getItem('userId'));
+    const localStorageUserId = JSON.parse(localStorage.getItem('username'));
     if (localStorageUserId !== null) {
       return true;
     } else {
@@ -71,10 +70,10 @@ class App extends Component {
     }
   };
 
-  handleRegister = (userId, username) => {
-    if (userId !== undefined) {
+  handleRegister = (username) => {
+    debugger
+    if (username !== undefined) {
       this.setState({
-        userId: userId,
         userHoldings: 100000,
         username: username,
         isLogged: true,
@@ -84,12 +83,11 @@ class App extends Component {
     }
   };
 
-  handleLogIn = (userId, username) => {
+  handleLogIn = (username) => {
     debugger;
-    if (userId) {
-      localStorage.setItem('userId', JSON.stringify(userId));
+    if (username) {
+      localStorage.setItem('username', JSON.stringify(username));
       this.setState({
-        userId: userId,
         username: username,
         isLogged: true,
       });
@@ -111,7 +109,7 @@ class App extends Component {
           <Navigation isLogged={this.state.isLogged} />
           <Switch>
             <Route path="/" exact render={() => { <Home /> }} />
-            <Route path="/register" exact render={() => <Registration />} />
+            <Route path="/register" exact render={() => <Registration handleRegister={this.handleRegister} />} />
             <Route path="*" component={() => <PageNotFound />} />
           </Switch>
           <Footer />
