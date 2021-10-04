@@ -1,7 +1,9 @@
+from django.core.checks import messages
 import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password, check_password
+from .models import User, Stock, Transactions
 
 
 import os
@@ -56,9 +58,7 @@ def test(request,stock):
 
 # @api_view(["POST"])
 # def add_stock(request):
-    # USER_DETAILS = request.get_json()
-    # USER = Users.query.filter_by(id=USER_DETAILS['id']).first()
-    # if USER:
+    # USER_DETAILS = request.get_json()user
     #     STOCK = Stock.query.filter_by(
     #         stock_symbol=USER_DETAILS["stockSymbol"], user_id=USER_DETAILS["id"]).first()
     #     if STOCK != None:
@@ -80,13 +80,7 @@ def test(request,stock):
     #         user_holdings = USER.user_holdings - USER_DETAILS['estimatedCost']
     #         USER.user_holdings = user_holdings
     #         user_stock = Stock(company_name=USER_DETAILS['company_name'],
-    #                            stock_symbol=USER_DETAILS['stockSymbol'], stock_cost=USER_DETAILS['stockCost'],
-    #                            user_estimated_shares=USER_DETAILS['estimatedShares'], user_estimated_cost=USER_DETAILS['estimatedCost'], user_id=USER_DETAILS['id'])
-    #         transaction = Transactions(company_name=USER_DETAILS['company_name'], user_estimated_cost=USER_DETAILS[
-    #             'estimatedCost'], user_holdings=user_holdings, user_id=USER_DETAILS['id'])
-    #         db.session.add(user_stock)
-    #         db.session.add(transaction)
-    #         db.session.commit()
+    #                            stock_symbol=USER_DETAILS['stockSymuser
     #         return jsonify("Success! Stock updated!"), 200
     # else:
     #     return jsonify('Something went wrong on our end! Please try again later.'), 500
@@ -176,24 +170,29 @@ def test(request,stock):
 #     else:
 #         return jsonify('User not found in our record! You will be redirected to the home page.', 500)
 
-# @api_view(["POST"])
-# def signup():
-#     USER_DETAILS = request.get_json()
-#     USERNAME = Users.query.filter_by(
-#         username=USER_DETAILS['username']).first()
-#     hashed_password = bcrypt.generate_password_hash(
-#         USER_DETAILS['password']).decode('utf-8')
+@api_view(["PUT","POST"])
+def signup(request):
+    USER_DETAIL = request.data
+    FILTER_BY_USERNAME = User.objects.filter(username=USER_DETAIL['username']).first()
+    FILTER_BY_EMAIL = User.objects.filter(email=USER_DETAIL['email']).first()
+    print(USER_DETAIL)
+    print(USER_DETAIL['username'])
+    print(FILTER_BY_USERNAME)
+    print(FILTER_BY_EMAIL)
 
-#     if USERNAME is None:
-#         user = Users(first_name=USER_DETAILS['first_name'], last_name=USER_DETAILS['last_name'],
-#                      email=USER_DETAILS['email'], username=USER_DETAILS['username'], password=hashed_password, user_holdings=USER_DETAILS['userHoldings'])
-#         db.session.add(user)
-#         db.session.commit()
-#         MESSAGE = "Success! You will be redirect to your account shortly!"
-#         return jsonify(MESSAGE, 200, user.id, user.username)
-#     else:
-#         MESSAGE = "The username has already been used! Please choose another username!"
-#         return jsonify(MESSAGE, 500)
+    if request.method == "PUT":
+        if FILTER_BY_USERNAME is not None:
+            return Response({"message":"That username is already been used! Please choose another username!", "status_code": 500})
+        elif FILTER_BY_EMAIL is not None:
+            return Response({"message":"That email is already been used! Please choose another email!", "status_code": 500})
+        else:
+            return Response({"message":"Success! You will be redirected to your account shortly!",'status_code': 201})
+    else:
+        hashed_password = make_password(USER_DETAIL['password'], salt=None, hasher='default')
+        USER = User(first_name=USER_DETAIL['firstName'], last_name=USER_DETAIL['lastName'], username=USER_DETAIL['username'], password=hashed_password, email=USER_DETAIL['email'], user_holdings=USER_DETAIL['userHoldings'])
+        USER.save()
+        return Response({"status_code":200} )
+        
 
 # @api_view(["PUT"])
 # def login():
