@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Button, Card } from "react-bootstrap"
-import axios from 'axios'
-import SearchComponent from "../Search-Component/SearchComponent";
+import News from "../../Components/News-Stream/News"
+import Banner from "../Banner-Component/Banner";
 
 const Home = () => {
 
     return (
-        <div id="home" style={{ padding: "20px" }}>
-            <SearchComponent />
+        <div id="home" style={{ height: "1000px", width: "100%", margin: "100px auto" }}>
+            <Banner />
+            <News />
         </div>
     );
 };
