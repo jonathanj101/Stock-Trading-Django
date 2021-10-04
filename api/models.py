@@ -9,7 +9,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=100, null=False)
     last_name = models.CharField(max_length=100, null=False)
     username = models.CharField(max_length=25, null=False, unique=True)
-    password = models.CharField(max_length=25, null=False)
+    password = models.CharField(max_length=100, null=False)
     email = models.CharField(max_length=50, null=False, unique=True)
     user_holdings = models.FloatField(null=False)
     # stock = models.ForeignKey(Stock)
