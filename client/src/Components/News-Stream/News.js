@@ -1,21 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Card } from "react-bootstrap"
 
 
 const News = () => {
 
-    const [test, setTest] = useState([])
+    const [news, setNews] = useState([])
+    const [isNews, setIsNews] = useState(false)
+
+    useEffect(() => {
+        if (isNews) {
+            fetchNews()
+        } else {
+            setIsNews(true)
+        }
+    }, [isNews])
 
     const fetchNews = async () => {
         const response = await axios.get("http://127.0.0.1:8000/api/news")
         console.log(response)
-        setTest(response.data)
+        setNews(response.data)
     }
 
-    const table = test.map((item, num) => {
+    const table = news.map((item, num) => {
         console.log(item, num)
         return (
-            <Card>
+            <Card style={{ width: "100%" }} key={num}>
                 <Card.Img src={item.image} />
                 <Card.Body key={num}>
                     <Card.Title>{item.headline}</Card.Title>
@@ -23,8 +33,7 @@ const News = () => {
                     <Card.Text>
                         {item.summary}
                     </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
+                    <Card.Link target="_blank" href={item.qmUrl}>Read More</Card.Link>
                 </Card.Body>
             </Card>
 
@@ -32,8 +41,13 @@ const News = () => {
     })
 
     return (
-        <div>
-
+        <div id="news-component" style={{ margin: "0", height: "100%", }}>
+            <div>
+                <p>News</p>
+            </div>
+            <div id="news-div" style={{ width: "25%", margin: "auto", overflow: "auto", height: "1000px" }}>
+                {table}
+            </div>
         </div>
     )
 }
