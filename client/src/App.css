@@ -1,0 +1,13 @@
+.nav-link {
+    display: inline-block;
+    padding: 0;
+    height:25px
+}
+
+.nav-link:hover {
+    border-bottom: 2px solid rgb(255, 255, 255);
+}
+
+#search-item-div:hover {
+    cursor: pointer;
+}
