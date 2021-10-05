@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Form, InputGroup, ListGroup } from 'react-bootstrap';
+import BuyStockModal from '../Buy-Sell-Handlers/Buy-Stock/BuyStockModal';
 // import { styles } from './SearchComponentStyles';
 
-const SearchComponent = ({ handleShow, getStockFromSearchAddToModal }) => {
+const SearchComponent = ({ getStockFromSearchAddToModal }) => {
     const [textInput, setTextInput] = useState('');
     const [stockPrice, setStockPrice] = useState('');
     const [stockChange, setStockChange] = useState('');
     const [stockSymbol, setStockSymbol] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [isStockSearched, setIsStockSearched] = useState(false);
+    const [showBuyStockModal, setBuyStockModal] = useState(false);
 
     const getTextInput = (e) => {
         const { value } = e.currentTarget;
@@ -22,31 +24,41 @@ const SearchComponent = ({ handleShow, getStockFromSearchAddToModal }) => {
     };
 
     const sendRequestOnTextInput = (textInput) => {
-        console.log(textInput)
-        fetch(`http://127.0.0.1:8000/api/search_stock/${textInput}`)
+        console.log(textInput);
+        fetch(`http://127.0.0.1:8000/api/search/${textInput}`)
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data)
                 setCompanyName(data.company_name);
                 setStockSymbol(data.symbol);
-                setStockPrice(`$${data.cost.toString()}`);
-                setStockChange(data.change);
+                setStockPrice(`$${data.cost}`);
             });
     };
 
-    const onSelect = (e) => {
+    const onSelect = () => {
+        console.log(companyName);
         handleShow();
-        getStockFromSearchAddToModal({
-            stockName: companyName,
-            stockSymbol: stockSymbol,
-            stockPrice: stockPrice,
-            stockChange: stockChange,
-        });
+        getStockFromSearchAddToModal(
+            companyName,
+            stockSymbol,
+            stockPrice,
+            stockChange,
+        );
+    };
+
+    const handleShow = () => {
+        setBuyStockModal(true);
     };
 
     return (
         <div id="search">
-            <Form.Group >
+            <BuyStockModal
+                showBuyStockModal={showBuyStockModal}
+                stockSymbol={stockSymbol}
+                stockName={companyName}
+                stockPrice={stockPrice}
+                handleClose={setBuyStockModal}
+            />
+            <Form.Group style={{ width: '50%', margin: 'auto' }}>
                 <InputGroup>
                     <Form.Control
                         id="search-component"
@@ -74,13 +86,15 @@ const SearchComponent = ({ handleShow, getStockFromSearchAddToModal }) => {
                             action
                             variant=""
                         >
-                            <div id="search-item">
-                                <span>
-                                    {stockSymbol}
-                                </span>
-                                <span>
-                                    {companyName}
-                                </span>
+                            <div
+                                id="search-item"
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <span>{stockSymbol}</span>
+                                <span>{companyName}</span>
                                 <span>{stockPrice}</span>
                             </div>
                         </ListGroup.Item>
