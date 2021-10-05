@@ -1,38 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, DropdownButton, Dropdown, Form } from 'react-bootstrap';
-import AlertMsgComponent from '../../AlertMsgComponent';
+import AlertMsgComponent from '../../../Components/AlertMesgComponent';
 
 const BuyStockModal = ({
     showBuyStockModal,
-    setIsStockQuantity,
-    calculateCost,
-    calculateOnTitleChange,
-    handleUserStockInput,
-    estimatedCost,
-    estimatedShares,
-    isStockQuantity,
+    // setIsStockQuantity,
+    // calculateCost,
+    // calculateOnTitleChange,
+    // handleUserStockInput,
+    // estimatedCost,
+    // estimatedShares,
+    // isStockQuantity,
     stockName,
     stockSymbol,
     stockPrice,
-    addStock,
-    setStockInputValue,
-    setEstimatedShares,
-    setEstimatedCost,
-    setShow,
-    userHoldings,
-    stockInputValue,
+    // addStock,
+    // setStockInputValue,
+    // setEstimatedShares,
+    // setEstimatedCost,
+    handleClose,
+    // userHoldings,
+    // stockInputValue,
 }) => {
     const [dropdownTitle, setDropdownTitle] = useState('Dollars');
     const [dropdownItemTitle, setDropdownItemTitle] = useState('Shares');
     const [showAlertMessage, setShowAlertMessageComponent] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [estimatedShares, setEstimatedShares] = useState('0.00');
+    const [estimatedCost, setEstimatedCost] = useState('$0.00');
+    const [isStockQuantity, setIsStockQuantity] = useState(true);
+    const [stockInputValue, setStockInputValue] = useState('');
+    const [userHoldings, setUserHoldings] = useState('');
+    const localStorageUsername = JSON.parse(localStorage.getItem('username'));
+
+    useEffect(() => {
+        fetchUserHoldings();
+    }, []);
+
+    const fetchUserHoldings = async () => {
+        try {
+            if (localStorageUsername !== null) {
+                const response = await axios.put(
+                    'http://127.0.0.1:8000/api/user',
+                    {
+                        username: localStorageUsername,
+                    },
+                );
+                console.log(response);
+                setUserHoldings(response.data.user_holdings);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleSubmit = () => {
         if (stockInputValue <= userHoldings) {
             onBuyHandler();
-            addStock();
+            // addStock();
             setTimeout(() => {
                 handleClose();
             }, 2000);
@@ -45,12 +72,15 @@ const BuyStockModal = ({
     };
 
     const onBuyHandler = async () => {
-        const localStorageUserId = JSON.parse(localStorage.getItem('userId'));
+        debugger;
+        const localStorageUsername = JSON.parse(
+            localStorage.getItem('username'),
+        );
         const parsed = parseFloat(stockPrice.slice(1));
         try {
-            const response = await axios.post('/add_stock', {
-                id: localStorageUserId,
-                company_name: stockName,
+            const response = await axios.post('http://127.0.0.1:8000/api/buy', {
+                username: localStorageUsername,
+                companyName: stockName,
                 stockCost: parsed,
                 stockSymbol: stockSymbol,
                 estimatedShares: estimatedShares,
@@ -58,7 +88,7 @@ const BuyStockModal = ({
                 userHoldings: userHoldings,
             });
             setShowAlertMessageComponent(true);
-            const message = response.data;
+            const message = response.data.message;
             setSuccessMessage(message);
         } catch (error) {
             console.log(error);
@@ -72,9 +102,66 @@ const BuyStockModal = ({
         setIsStockQuantity(!isStockQuantity);
     };
 
-    const handleClose = () => {
+    const handleUserStockInput = (e) => {
+        const { value } = e.currentTarget;
+        setStockInputValue(value);
+    };
+
+    const calculateOnTitleChange = () => {
+        const parseStockInputValue = parseFloat(stockInputValue);
+        const parseSliceStockCost = stockPrice.includes('.')
+            ? parseFloat(stockPrice.slice(1))
+            : parseInt(stockPrice.slice(1));
+
+        if (!isStockQuantity) {
+            const totalShares = parseStockInputValue / parseSliceStockCost;
+            if (!isNaN(totalShares)) {
+                setEstimatedShares(totalShares);
+                return setEstimatedShares(totalShares);
+            } else {
+                setEstimatedShares('0.00');
+                return setEstimatedShares('0.00');
+            }
+        } else {
+            const totalCost = parseSliceStockCost * parseStockInputValue;
+            if (!isNaN(totalCost)) {
+                setEstimatedCost(totalCost);
+                return setEstimatedCost(totalCost);
+            } else {
+                setEstimatedCost('$0.00');
+                return setEstimatedCost('$0.00');
+            }
+        }
+    };
+
+    const calculateCost = (stockInput) => {
+        const { value } = stockInput.currentTarget;
+        let parseStockInput = parseFloat(value);
+        const parseSliceStockCost = stockPrice.includes('.')
+            ? parseFloat(stockPrice.slice(1))
+            : parseInt(stockPrice.slice(1));
+        if (isStockQuantity) {
+            const totalShares = parseStockInput / parseSliceStockCost;
+            if (!isNaN(totalShares)) {
+                setEstimatedShares(totalShares);
+                setEstimatedCost(parseStockInput);
+            } else {
+                return;
+            }
+        } else {
+            const totalCost = parseSliceStockCost * parseStockInput;
+            if (!isNaN(totalCost)) {
+                setEstimatedCost(totalCost);
+                setEstimatedShares(parseStockInput);
+            } else {
+                return;
+            }
+        }
+    };
+
+    const handleCloseModal = () => {
         setShowAlertMessageComponent(false);
-        setShow(false);
+        handleClose(false);
         setStockInputValue('$0.00');
         setEstimatedShares('0.00');
         setEstimatedCost('$0.00');
@@ -84,7 +171,7 @@ const BuyStockModal = ({
         <div>
             <Modal
                 show={showBuyStockModal}
-                onHide={handleClose}
+                onHide={handleCloseModal}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
@@ -161,7 +248,7 @@ const BuyStockModal = ({
                 </Modal.Body>
                 <Modal.Footer>
                     <div className="text-center mx-auto">
-                        <h4>${userHoldings} available to buy stock </h4>
+                        <h4>${userHoldings} - available to buy stock </h4>
                         <Button onClick={() => handleSubmit()} block>
                             Buy
                         </Button>
