@@ -63,14 +63,23 @@ const LogInModal = ({ show, handleClose }) => {
 
     return (
         <div id="log-in-modal">
-            <Modal show={show} onHide={handleClose} centered size='lg' aria-labelledby="contained-modal-title-vcenter">
+            <Modal
+                show={show}
+                onHide={handleClose}
+                centered
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+            >
                 <Modal.Header>
-                    <Modal.Title>
+                    <Modal.Title
+                        style={{ fontSize: '2.75rem', fontWeight: 'bold' }}
+                    >
                         Log In
                     </Modal.Title>
                 </Modal.Header>
 
                 <Form
+                    style={{ width: '50%', margin: 'auto' }}
                     id="log-in-form"
                     noValidate
                     validated={validate}
@@ -84,10 +93,10 @@ const LogInModal = ({ show, handleClose }) => {
                         successMessage={successMessage}
                         show={showAlertMsgComponent}
                     />
-                    <Form.Text>
-                        Sign In to your account
-                    </Form.Text>
-                    <Form.Group controlId="email">
+                    <Form.Group
+                        style={{ margin: '50px auto' }}
+                        controlId="email"
+                    >
                         <Form.Control
                             required
                             onChange={(e) => setUsername(e.target.value)}
@@ -96,12 +105,17 @@ const LogInModal = ({ show, handleClose }) => {
                             value={username}
                             placeholder="Enter Username"
                         />
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                        <Form.Control.Feedback>
+                            Looks good!
+                        </Form.Control.Feedback>
                         <Form.Control.Feedback type="invalid">
                             Please type in your username!
                         </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId="password">
+                    <Form.Group
+                        style={{ margin: '50px auto' }}
+                        controlId="password"
+                    >
                         <Form.Control
                             onChange={(e) => setPassword(e.target.value)}
                             name="password"
@@ -110,7 +124,9 @@ const LogInModal = ({ show, handleClose }) => {
                             placeholder="Password"
                             required
                         />
-                        <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                        <Form.Control.Feedback>
+                            Looks good!
+                        </Form.Control.Feedback>
                         <Form.Control.Feedback type="invalid">
                             Please type in your password!
                         </Form.Control.Feedback>
@@ -127,7 +143,11 @@ const LogInModal = ({ show, handleClose }) => {
                     </Button>
                     <div className="mt-5 d-flex ">
                         <p>Don't have an account?</p>
-                        <Link onClick={handleClose} className="ml-3" to="/register">
+                        <Link
+                            onClick={handleClose}
+                            className="ml-3"
+                            to="/register"
+                        >
                             Register here
                         </Link>
                     </div>
