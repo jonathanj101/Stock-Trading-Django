@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Nav, Navbar, Container } from "react-bootstrap";
-import LogInModal from "../User-Auth/Log-In/LogInModal";
+import React, { useState } from 'react';
+import { Nav, Navbar, Container } from 'react-bootstrap';
+import LogInModal from '../User-Auth/Log-In/LogInModal';
 
 const Navigation = ({ isLogged }) => {
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
 
     const handleClose = () => {
-        setShow(false)
-    }
+        setShow(false);
+    };
 
     return (
         <div>
@@ -16,16 +16,23 @@ const Navigation = ({ isLogged }) => {
                 <Container>
                     <Navbar.Brand href="/">FST</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
+                    <Navbar.Collapse
+                        id="responsive-navbar-nav"
+                        style={{ justifyContent: 'center' }}
+                    >
                         <Nav className="me-auto">
-                            <Nav.Link href="#about">About</Nav.Link>
-                            {isLogged
-                                ? <div>
-                                    <Nav.Link href="#summary">Summary</Nav.Link>
-                                    <Nav.Link href="#account">Account</Nav.Link></div>
-                                : <div>
-                                    <Nav.Link onClick={() => setShow(true)}>Log In</Nav.Link>
-                                </div>}
+                            <Nav.Link href="/about">About</Nav.Link>
+                            {isLogged ? (
+                                <div>
+                                    <Nav.Link href="/summary">Summary</Nav.Link>
+                                </div>
+                            ) : (
+                                <div>
+                                    <Nav.Link onClick={() => setShow(true)}>
+                                        Log In
+                                    </Nav.Link>
+                                </div>
+                            )}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
