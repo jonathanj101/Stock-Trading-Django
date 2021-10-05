@@ -12,7 +12,6 @@ class User(models.Model):
     password = models.CharField(max_length=100, null=False)
     email = models.CharField(max_length=50, null=False, unique=True)
     user_holdings = models.FloatField(null=False)
-    # stock = models.ForeignKey(Stock)
     
     def __str__(self):
         return f"User (' {self.first_name}', '{self.last_name}' , '{self.username}' , '{self.email}', '{self.user_holdings}' )"
