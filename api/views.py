@@ -50,17 +50,13 @@ def add_stock(request):
     FILTER_BY_USER = User.objects.filter(username=DATA_RECIEVED["username"]).first()
     FILTER_BY_STOCK = Stock.objects.filter(stock_symbol=DATA_RECIEVED["stockSymbol"], user_id_id=FILTER_BY_USER.id).first()
 
-    print(FILTER_BY_USER)
-    print(FILTER_BY_USER.id)
-    print(FILTER_BY_STOCK)
-
     if FILTER_BY_USER:
 
         if FILTER_BY_STOCK != None:
 
             update_user_cost = (FILTER_BY_STOCK.user_estimated_cost + DATA_RECIEVED["estimatedCost"])
             update_user_shares = (FILTER_BY_STOCK.user_estimated_shares + DATA_RECIEVED["estimatedShares"])
-            update_user_holdings = FILTER_BY_USER.user_holdings - update_user_cost
+            update_user_holdings = FILTER_BY_USER.user_holdings - DATA_RECIEVED["estimatedCost"]
 
             FILTER_BY_STOCK.user_estimated_cost = update_user_cost
             FILTER_BY_STOCK.user_estimated_shares = update_user_shares
@@ -70,11 +66,12 @@ def add_stock(request):
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED ["estimatedCost"],user_holdings=FILTER_BY_USER.user_holdings, user_id_id=FILTER_BY_USER.id)
 
             transaction.save()
+            FILTER_BY_USER.save()
+            FILTER_BY_STOCK.save()
 
             return Response({"message":"Success! Stock added!", "status_code":201})
         else:
             user_holdings = FILTER_BY_USER.user_holdings - DATA_RECIEVED['estimatedCost']
-            print(user_holdings)
             FILTER_BY_USER.user_holdings = user_holdings
             user_stock = Stock(company_name=DATA_RECIEVED['companyName'],
                                stock_symbol=DATA_RECIEVED['stockSymbol'], stock_cost=DATA_RECIEVED['stockCost'],
@@ -83,60 +80,55 @@ def add_stock(request):
                 'estimatedCost'], user_holdings=user_holdings, user_id_id=FILTER_BY_USER.id)
             user_stock.save()
             transaction.save()
+            FILTER_BY_USER.save()
             
             return Response({"message":"Success! Stock updated!", "status_code":201})
 
     return Response({"message":"Something went wrong on out end! Please try again!", "status_code":500})
 
 # @api_view(["POST"])
-# def sell_stock():
-#     USER_DETAILS = request.get_json()
-#     USER = Users.query.filter_by(id=USER_DETAILS['id']).first()
+# def sell_stock(request):
+#     DATA_RECIEVED = request.get_json()
+#     FILTER_BY_USER = User.objects.filter(username=DATA_RECIEVED["username"]).first()
+#     FILTER_BY_STOCK = Stock.objects.filter(stock_symbol=DATA_RECIEVED["stockSymbol"], user_id_id=FILTER_BY_USER.id).first()
 
-#     STOCK = Stock.query.filter_by(
-#         stock_symbol=USER_DETAILS['stockSymbol'], user_id=USER_DETAILS["id"]).first()
+#     SEARCH_STOCK = f"{BASE_URL}/stable/stock/{DATA_RECIEVED['stockSymbol']}/quote?token={IEX_CLOUD_API_KEY}"
 
-#     SEARCH_STOCK = "{}/stable/stock/{}/quote?token={}".format(
-#         BASE_URL, USER_DETAILS['stockSymbol'], API_KEY)
+#     make_request = requests.get(SEARCH_STOCK)
+#     response = make_request.json()
 
-#     req = requests.get(SEARCH_STOCK)
+#     stock_bought_at = FILTER_BY_STOCK.stock_cost
 
-#     resp = req.json()
+#     difference_in_cost = (response['latestPrice'] - stock_bought_at) * FILTER_BY_STOCK.user_estimated_shares
+#     difference_in_shares = (FILTER_BY_USER.user_estimated_cost - DATA_RECIEVED["userSellingAmount"])/ FILTER_BY_STOCK.stock_cost
 
-#     stock_bought_at = STOCK.stock_cost
+#     MESSAGE = "SUCCESS!"
 
-#     difference_in_cost = (resp['latestPrice'] -
-#                           stock_bought_at) * STOCK.user_estimated_shares
+#     if FILTER_BY_USER:
 
-#     difference_in_shares = (STOCK.user_estimated_cost -
-#                             USER_DETAILS['userSellingAmount']) / STOCK.stock_cost
-#     user_holdings = USER.user_holdings + \
-#         difference_in_cost + USER_DETAILS['userSellingAmount']
+        #  need testing first
+    # if USER:
+    #     STOCK.user_estimated_cost = STOCK.user_estimated_cost - \
+    #         USER_DETAILS['userSellingAmount']
+    #     STOCK.user_estimated_shares = difference_in_shares
+    #     USER.user_holdings = user_holdings
+    #     if STOCK.user_estimated_cost == 0:
+    #         transaction = Transactions(company_name=USER_DETAILS['companyName'], user_estimated_cost=USER_DETAILS[
+    #             'userSellingAmount'], user_holdings=user_holdings, user_id=USER_DETAILS['id'])
+    #         stock = Stock.query.filter_by(
+    #             stock_symbol=USER_DETAILS['stockSymbol']).delete()
+    #         db.session.add(transaction)
+    #         db.session.commit()
+    #         return (MESSAGE, 200)
+    #     else:
+    #         transaction = Transactions(company_name=USER_DETAILS['companyName'], user_estimated_cost=USER_DETAILS[
+    #             'userSellingAmount'], user_holdings=user_holdings, user_id=USER_DETAILS['id'])
+    #         db.session.add(transaction)
+    #         db.session.commit()
 
-#     MESSAGE = "Success!"
-
-#     if USER:
-#         STOCK.user_estimated_cost = STOCK.user_estimated_cost - \
-#             USER_DETAILS['userSellingAmount']
-#         STOCK.user_estimated_shares = difference_in_shares
-#         USER.user_holdings = user_holdings
-#         if STOCK.user_estimated_cost == 0:
-#             transaction = Transactions(company_name=USER_DETAILS['companyName'], user_estimated_cost=USER_DETAILS[
-#                 'userSellingAmount'], user_holdings=user_holdings, user_id=USER_DETAILS['id'])
-#             stock = Stock.query.filter_by(
-#                 stock_symbol=USER_DETAILS['stockSymbol']).delete()
-#             db.session.add(transaction)
-#             db.session.commit()
-#             return (MESSAGE, 200)
-#         else:
-#             transaction = Transactions(company_name=USER_DETAILS['companyName'], user_estimated_cost=USER_DETAILS[
-#                 'userSellingAmount'], user_holdings=user_holdings, user_id=USER_DETAILS['id'])
-#             db.session.add(transaction)
-#             db.session.commit()
-
-#         return (MESSAGE, 200)
-#     else:
-#         return ('Looks like there is an error on our end!', 500)
+    #     return (MESSAGE, 200)
+    # else:
+    #     return ('Looks like there is an error on our end!', 500)
 
 # @api_view(["PUT"])
 # def user_stock():
