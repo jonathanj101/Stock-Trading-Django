@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
-import AlertMsgComponent from '../../AlertMsgComponent';
+import AlertMsgComponent from '../../AlertMesgComponent';
 
 const SellStockModal = ({
     showSellStockModal,
-    setSellStockModal,
+    handleSellModal,
     stockName,
     stockSymbol,
     estimatedCost,
@@ -23,6 +23,8 @@ const SellStockModal = ({
     const [show, setShow] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
+    console.log(stockName);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const form = e.currentTarget;
@@ -33,7 +35,8 @@ const SellStockModal = ({
             onSellHandler();
             setValidated(false);
             setTimeout(() => {
-                handleClose();
+                handleSellModal();
+                clearForm();
                 setCounter(true);
             }, 2000);
         }
@@ -51,11 +54,6 @@ const SellStockModal = ({
         const message = response.data;
         setSuccessMessage(message);
         setShow(true);
-    };
-
-    const handleClose = () => {
-        setSellStockModal(false);
-        clearForm();
     };
 
     const clearForm = () => {
@@ -123,7 +121,7 @@ const SellStockModal = ({
                 aria-labelledby="contained-modal-title-vcenter"
                 size="lg"
                 centered
-                onHide={handleClose}
+                onHide={handleSellModal}
             >
                 <Form
                     noValidate
