@@ -1,6 +1,6 @@
 from django.urls import path
 from django.urls import path
-from .views import add_stock, fetch_news, search_stock, signup, user
+from .views import add_stock, fetch_news, search_stock, signup, testing, user, some_test
 
 
 urlpatterns = [
@@ -8,5 +8,7 @@ urlpatterns = [
     path("search/<str:stock>", search_stock),
     path("buy",add_stock),
     path("signup", signup),
-    path('user', user)
+    path('user', user),
+    path("test/<str:stock>", some_test),
+    path("testing", testing)
     ]
