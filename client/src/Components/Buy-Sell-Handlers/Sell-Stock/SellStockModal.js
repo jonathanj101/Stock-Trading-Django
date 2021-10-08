@@ -5,7 +5,7 @@ import AlertMsgComponent from '../../AlertMesgComponent';
 
 const SellStockModal = ({
     showSellStockModal,
-    handleSellModal,
+    handleCloseSellModal,
     stockName,
     stockSymbol,
     estimatedCost,
@@ -22,8 +22,9 @@ const SellStockModal = ({
     const [validated, setValidated] = useState(false);
     const [show, setShow] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const localStorageUsername = JSON.parse(localStorage.getItem('username'));
 
-    console.log(stockName, estimatedShares);
+    console.log(stockName, estimatedShares, userHoldings);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,23 +36,26 @@ const SellStockModal = ({
             onSellHandler();
             setValidated(false);
             setTimeout(() => {
-                handleSellModal();
+                handleCloseSellModal();
                 clearForm();
-                setCounter(true);
+                // setCounter(true);
             }, 2000);
         }
     };
 
     const onSellHandler = async () => {
-        const localStorageUserId = JSON.parse(localStorage.getItem('userId'));
-        const response = await axios.post('/sell_stock', {
-            id: localStorageUserId,
-            companyName: stockName,
-            stockSymbol: stockSymbol,
-            estimatedShares: estimatedShares,
-            userSellingAmount: userSellingAmount,
-        });
-        const message = response.data;
+        debugger;
+        const response = await axios.post(
+            'http://127.0.0.1:8000/api/sell-stock',
+            {
+                username: localStorageUsername,
+                companyName: stockName,
+                stockSymbol: stockSymbol,
+                estimatedShares: estimatedShares,
+                userSellingAmount: userSellingAmount,
+            },
+        );
+        const message = response.data.message;
         setSuccessMessage(message);
         setShow(true);
     };
@@ -61,7 +65,7 @@ const SellStockModal = ({
         setUserInput('');
         setTotalSelling('0.00');
         setTotalOwned('0.00');
-        setTotalProfit();
+        setTotalProfit('$0.00');
         setValidated(false);
         setShow(false);
     };
@@ -103,13 +107,14 @@ const SellStockModal = ({
     };
 
     const sellAll = () => {
+        debugger;
         const parsedEstimatedCost = parseFloat(estimatedCost);
         const parsedDifInCost = parseFloat(differenceInCost);
         const totalProfit = parsedDifInCost + parsedEstimatedCost;
         const totalOwned = totalProfit - totalProfit;
         setTotalSelling(totalProfit);
         setTotalOwned(totalOwned);
-        setUserSellingAmount(parsedEstimatedCost);
+        setUserSellingAmount(totalProfit);
         setUserInput(totalProfit);
         setTotalProfit(totalProfit);
     };
@@ -122,7 +127,10 @@ const SellStockModal = ({
                 aria-labelledby="contained-modal-title-vcenter"
                 size="lg"
                 centered
-                onHide={handleSellModal}
+                onHide={() => {
+                    handleCloseSellModal();
+                    clearForm();
+                }}
             >
                 <Form
                     noValidate
@@ -142,13 +150,19 @@ const SellStockModal = ({
                         successMessage={successMessage}
                     />
                     <Modal.Body>
-                        <div id="stock-info-div">
-                            <span>
+                        <div id="stock-info-div" style={styles.spansDiv}>
+                            <span style={styles.spans}>
                                 {stockSymbol} = ${estimatedCost}
                             </span>
-                            <span>Shares = {estimatedShares}</span>
-                            <span>Profit = {differenceInCost}</span>
-                            <span>Total = {totalProfit} </span>
+                            <span style={styles.spans}>
+                                Shares = {estimatedShares}
+                            </span>
+                            <span style={styles.spans}>
+                                Profit = {differenceInCost}
+                            </span>
+                            <span style={styles.spans}>
+                                Total = {totalProfit}{' '}
+                            </span>
                         </div>
                         <div className="w-100 mx-auto" id="stock-info-2div">
                             <Form.Row className="mb-5">
@@ -207,6 +221,16 @@ const SellStockModal = ({
             </Modal>
         </div>
     );
+};
+
+const styles = {
+    spansDiv: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    spans: {
+        margin: '10px 0',
+    },
 };
 
 export default SellStockModal;
