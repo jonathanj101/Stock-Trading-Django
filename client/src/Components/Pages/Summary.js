@@ -43,12 +43,19 @@ const Summary = () => {
         setStockCost(stock.cost);
         setUserHoldings(stock.userHoldings);
         setEstimatedShares(stock.userEstimatedShares);
-        setEstimatedCost(stock.cost);
+        setEstimatedCost(stock.userEstimatedHolding);
         setDifferenceInCost(stock.differenceInCost);
     };
 
-    const handleSellModal = () => {
-        setIsSellModal(!isSellModal);
+    const handleCloseSellModal = () => {
+        setIsSellModal(false);
+        setCompanyName('');
+        setStockSymbol('');
+        setStockCost('');
+        setUserHoldings('');
+        setEstimatedShares('');
+        setEstimatedCost('');
+        setDifferenceInCost('');
     };
 
     const userList = items.map((item, num) => {
@@ -60,7 +67,7 @@ const Summary = () => {
                         <Button
                             onClick={() => {
                                 handleStockInfoOnClick(item);
-                                handleSellModal();
+                                setIsSellModal(true);
                             }}
                         >
                             Sell
@@ -74,7 +81,7 @@ const Summary = () => {
     return (
         <div id="summary-component">
             <SellStockModal
-                handleSellModal={handleSellModal}
+                handleCloseSellModal={handleCloseSellModal}
                 showSellStockModal={isSellModal}
                 stockName={companyName}
                 stockSymbol={stockSymbol}
