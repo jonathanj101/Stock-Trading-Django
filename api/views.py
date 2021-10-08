@@ -126,47 +126,60 @@ def sell_stock(request):
     else:
         return Response({"message":"Looks like there is an error on our end!", "status_code":500})
 
-@api_view(["PUT"])
-def some_test(request,stock):
-    FILTER_BY_USER = User.objects.filter(username="test1").first()
-    FILTER_STOCK = Stock.objects.filter(user_id_id=FILTER_BY_USER.id).all()
-    data = []
+# @api_view(["PUT"])
+# def some_test(request,stock):
+#     FILTER_BY_USER = User.objects.filter(username="test1").first()
+#     FILTER_STOCK = Stock.objects.filter(user_id_id=FILTER_BY_USER.id).all()
+#     data = []
 
-    for stock in FILTER_STOCK:
-        SEARCH_STOCK = f"{BASE_URL}/stable/stock/{stock}/quote?token={IEX_CLOUD_API_KEY}"
-        make_request = requests.get(SEARCH_STOCK)
-        response = make_request.json()
-        difference_in_cost = (response["latestPrice"] - stock.stock_cost) * stock.user_estimated_shares
-        objs = {
-            "companyName": stock.company_name,
-            "symbol": stock.stock_symbol,
-            "cost": stock.stock_cost,
-            "userEstimatedShares": stock.user_estimated_shares,
-            "userEstimatedHolding": stock.user_estimated_cost,
-            "differenceInCost": difference_in_cost
-        }
+#     for stock in FILTER_STOCK:
+#         SEARCH_STOCK = f"{BASE_URL}/stable/stock/{stock}/quote?token={IEX_CLOUD_API_KEY}"
+#         make_request = requests.get(SEARCH_STOCK)
+#         response = make_request.json()
+#         difference_in_cost = (response["latestPrice"] - stock.stock_cost) * stock.user_estimated_shares
+#         objs = {
+#             "companyName": stock.company_name,
+#             "symbol": stock.stock_symbol,
+#             "cost": stock.stock_cost,
+#             "userEstimatedShares": stock.user_estimated_shares,
+#             "userEstimatedHolding": stock.user_estimated_cost,
+#             "differenceInCost": difference_in_cost
+#         }
 
-        data.append(objs)
+#         data.append(objs)
 
-    return Response(data)
+#     return Response(data)
 
 @api_view(["GET"])
-def testing(request):
+def user_stock(request):
+    DATA_RECIEVED = request.data
     FILTER_BY_USER = User.objects.filter(username="test1").first()
     FILTER_STOCK = Stock.objects.filter(user_id_id=FILTER_BY_USER.id).all()
     data = []
 
-    for stock in FILTER_STOCK:
-        objs = {
-            "companyName": stock.company_name,
-            "symbol": stock.stock_symbol,
-            "cost": stock.stock_cost,
-            "userEstimatedShares": stock.user_estimated_shares,
-            "userEstimatedHolding": stock.user_estimated_cost,
-        }
-        data.append(objs)
+    if FILTER_BY_USER:
 
-    return Response(data)
+        for stock in FILTER_STOCK:
+            SEARCH_STOCK = f"{BASE_URL}/stable/stock/{stock.stock_symbol}/quote?token={IEX_CLOUD_API_KEY}"
+            make_request = requests.get(SEARCH_STOCK)
+            response = make_request.json()
+            difference_in_cost = (response["latestPrice"] - stock.stock_cost) * stock.user_estimated_shares
+
+            objs = {
+                "companyName": stock.company_name,
+                "symbol": stock.stock_symbol,
+                "cost": stock.stock_cost,
+                "userEstimatedShares": stock.user_estimated_shares,
+                "userEstimatedHolding": stock.user_estimated_cost,
+                "differenceInCost": difference_in_cost
+            }
+            data.append(objs)
+        if data != "":
+            return Response(data)
+        else:
+            return Response({"message":"An issue has occured on our end! Please try again later", "status_code": 500})
+    else:
+        return Response({"message":"User not found in our record! You will be redirected to the home page.", "status_code": 500})
 # @api_view(["PUT"])
 # def user_stock():
 #     USER_DETAILS = request.get_json()
