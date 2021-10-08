@@ -9,12 +9,15 @@ const Summary = () => {
     const [companyName, setCompanyName] = useState('');
     const [stockSymbol, setStockSymbol] = useState('');
     const [stockCost, setStockCost] = useState('');
+    const [estimatedShares, setEstimatedShares] = useState('');
+    const [estimatedCost, setEstimatedCost] = useState('');
+    const [differenceInCost, setDifferenceInCost] = useState('');
     const [userHoldings, setUserHoldings] = useState('');
     const [isSellModal, setIsSellModal] = useState(false);
     const [items, setItems] = useState([]);
 
     const fetchSome = async () => {
-        const response = await axios.get('http://127.0.0.1:8000/api/testing');
+        const response = await axios.get('http://127.0.0.1:8000/api/stocks');
         console.log(response);
 
         setItems(response.data);
@@ -39,6 +42,9 @@ const Summary = () => {
         setStockSymbol(stock.symbol);
         setStockCost(stock.cost);
         setUserHoldings(stock.userHoldings);
+        setEstimatedShares(stock.userEstimatedShares);
+        setEstimatedCost(stock.cost);
+        setDifferenceInCost(stock.differenceInCost);
     };
 
     const handleSellModal = () => {
@@ -73,6 +79,10 @@ const Summary = () => {
                 stockName={companyName}
                 stockSymbol={stockSymbol}
                 userHoldings={userHoldings}
+                stockCost={stockCost}
+                estimatedShares={estimatedShares}
+                estimatedCost={estimatedCost}
+                differenceInCost={differenceInCost}
             />
 
             <SearchComponent
