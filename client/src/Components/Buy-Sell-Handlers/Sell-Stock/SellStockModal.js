@@ -23,7 +23,7 @@ const SellStockModal = ({
     const [show, setShow] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
-    console.log(stockName);
+    console.log(stockName, estimatedShares);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -78,6 +78,7 @@ const SellStockModal = ({
     };
 
     const calculateAmountSellingOnInputChange = (value) => {
+        debugger;
         const parsedEstimatedCost = parseFloat(estimatedCost);
         const totalProfit = parseFloat(differenceInCost) + parsedEstimatedCost;
         const totalSelling = totalProfit - value;
