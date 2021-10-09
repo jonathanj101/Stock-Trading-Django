@@ -89,10 +89,8 @@ def add_stock(request):
 @api_view(["POST"])
 def sell_stock(request):
     DATA_RECIEVED = request.data
-    print(DATA_RECIEVED)
     FILTER_BY_USER = User.objects.filter(username=DATA_RECIEVED["username"]).first()
     FILTER_BY_STOCK = Stock.objects.filter(stock_symbol=DATA_RECIEVED["stockSymbol"], user_id_id=FILTER_BY_USER.id).first()
-    print(f"line 95 {FILTER_BY_STOCK}")
 
     SEARCH_STOCK = f"{BASE_URL}/stable/stock/{DATA_RECIEVED['stockSymbol']}/quote?token={IEX_CLOUD_API_KEY}"
 
@@ -109,17 +107,13 @@ def sell_stock(request):
     MESSAGE = "SUCCESS!"
 
     if FILTER_BY_USER:
-        print(f"line 1121 {FILTER_BY_STOCK}")
         FILTER_BY_STOCK.user_estimated_cost = FILTER_BY_STOCK.user_estimated_cost - DATA_RECIEVED["userSellingAmount"]
-        print(f"line 113 {FILTER_BY_STOCK}")
         FILTER_BY_STOCK.user_estimated_shares = difference_in_shares
         FILTER_BY_USER.user_holdings = user_holdings
         if FILTER_BY_STOCK.user_estimated_cost == 0:
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED["userSellingAmount"], user_holdings=user_holdings, user_id_id=FILTER_BY_USER.id)
             FILTER_BY_STOCK.delete()
             transaction.save()
-            # FILTER_BY_STOCK.save()
-
             return Response({"message":MESSAGE, "status_code": 201})
         else:
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED["userSellingAmount"], user_holdings=user_holdings,user_id_id=FILTER_BY_USER.id)
