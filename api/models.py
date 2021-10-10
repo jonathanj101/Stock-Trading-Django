@@ -14,7 +14,7 @@ class User(models.Model):
     user_holdings = models.FloatField(null=False)
     
     def __str__(self):
-        return f"User (' {self.first_name}', '{self.last_name}' , '{self.username}' , '{self.email}', '{self.user_holdings}' )"
+        return f"User (' {self.first_name}', '{self.last_name}' , '{self.username}' ,`{self.password}``, '{self.email}', '{self.user_holdings}' )"
 
 class Stock(models.Model):
     company_name = models.CharField(max_length=100, null=False)
