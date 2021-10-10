@@ -124,30 +124,6 @@ def sell_stock(request):
     else:
         return Response({"message":"Looks like there is an error on our end!", "status_code":500})
 
-# @api_view(["PUT"])
-# def some_test(request,stock):
-#     FILTER_BY_USER = User.objects.filter(username="test1").first()
-#     FILTER_STOCK = Stock.objects.filter(user_id_id=FILTER_BY_USER.id).all()
-#     data = []
-
-#     for stock in FILTER_STOCK:
-#         SEARCH_STOCK = f"{BASE_URL}/stable/stock/{stock}/quote?token={IEX_CLOUD_API_KEY}"
-#         make_request = requests.get(SEARCH_STOCK)
-#         response = make_request.json()
-#         difference_in_cost = (response["latestPrice"] - stock.stock_cost) * stock.user_estimated_shares
-#         objs = {
-#             "companyName": stock.company_name,
-#             "symbol": stock.stock_symbol,
-#             "cost": stock.stock_cost,
-#             "userEstimatedShares": stock.user_estimated_shares,
-#             "userEstimatedHolding": stock.user_estimated_cost,
-#             "differenceInCost": difference_in_cost
-#         }
-
-#         data.append(objs)
-
-#     return Response(data)
-
 @api_view(["GET"])
 def user_stock(request):
     DATA_RECIEVED = request.data
@@ -179,40 +155,6 @@ def user_stock(request):
             return Response({"message":"An issue has occured on our end! Please try again later", "status_code": 500})
     else:
         return Response({"message":"User not found in our record! You will be redirected to the home page.", "status_code": 500})
-# @api_view(["PUT"])
-# def user_stock():
-#     USER_DETAILS = request.get_json()
-#     USER = Users.query.filter_by(id=USER_DETAILS['id']).first()
-#     STOCK = Stock.query.filter_by(user_id=USER_DETAILS['id']).all()
-#     stock_list = []
-
-#     if USER:
-#         for data in STOCK:
-#             search_url = "{}/stable/stock/{}/quote?token={}".format(
-#                 BASE_URL, data.stock_symbol, API_KEY)
-#             req = requests.get(search_url)
-#             resp = req.json()
-#             difference_in_cost = (
-#                 resp['latestPrice'] - data.stock_cost) * data.user_estimated_shares
-
-#             stock_obj = {
-#                 "companyName": data.company_name,
-#                 "symbol": data.stock_symbol,
-#                 "cost": data.stock_cost,
-#                 "userEstimatedShares": data.user_estimated_shares,
-#                 "userEstimatedHolding": data.user_estimated_cost,
-#                 "differenceInCost": difference_in_cost
-#             }
-
-#             stock_list.append(stock_obj)
-
-#         if stock_list != '':
-#             return jsonify({"stock": stock_list})
-#         else:
-#             return jsonify("An issue has occurred on our end! Please try again later", 500)
-
-#     else:
-#         return jsonify('User not found in our record! You will be redirected to the home page.', 500)
 
 @api_view(["PUT","POST"])
 def signup(request):
@@ -238,18 +180,15 @@ def signup(request):
         return Response({"status_code":200} )
         
 
-# @api_view(["PUT"])
-# def login():
-#     USER_DETAILS = request.get_json()
-
-#     USER = Users.query.filter_by(username=USER_DETAILS["username"]).first()
-#     if USER and bcrypt.check_password_hash(USER.password, USER_DETAILS['password']):
-#         MESSAGE = "You are logged in successfully! You will be redirected to your account shortly!"
-
-#         return jsonify(MESSAGE, 200, USER.id, USER.username)
-#     else:
-#         MESSAGE = "We don't recognize that username or password. Please try again!"
-#         return jsonify(MESSAGE, 500)
+@api_view(["PUT"])
+def login(reuqest):
+    DATA_RECIEVED = request.data
+    USER = User.objects.filter(username=DATA_RECIEVED['username']).first()
+    if USER:
+        if check_password(DATA_RECIEVED["password"], USER.password):
+            return Response({"message":"You are logged in successfully! You will be redirected to your account shortly!"})
+    else:
+        return Response({"message":"We don't recognice that username!", "status_code":500})
 
 @api_view(["PUT"])
 def user(request):
