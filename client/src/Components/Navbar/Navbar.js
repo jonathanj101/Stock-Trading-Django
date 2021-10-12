@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import LogInModal from '../User-Auth/Log-In/LogInModal';
 
-const Navigation = ({ isLogged }) => {
+const Navigation = ({ isLogged, handleLogIn }) => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
@@ -11,7 +11,11 @@ const Navigation = ({ isLogged }) => {
 
     return (
         <div>
-            <LogInModal show={show} handleClose={handleClose} />
+            <LogInModal
+                show={show}
+                handleClose={handleClose}
+                handleLogIn={handleLogIn}
+            />
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
                     <Navbar.Brand href="/">FST</Navbar.Brand>
