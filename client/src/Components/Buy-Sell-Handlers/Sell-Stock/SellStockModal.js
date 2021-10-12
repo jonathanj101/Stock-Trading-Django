@@ -114,7 +114,7 @@ const SellStockModal = ({
         const totalOwned = totalProfit - totalProfit;
         setTotalSelling(totalProfit);
         setTotalOwned(totalOwned);
-        setUserSellingAmount(totalProfit);
+        setUserSellingAmount(parsedEstimatedCost);
         setUserInput(totalProfit);
         setTotalProfit(totalProfit);
     };
