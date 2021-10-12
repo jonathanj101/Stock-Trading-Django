@@ -9,6 +9,7 @@ import Registration from './Components/User-Auth/Registration/Registration';
 import Footer from './Components/Footer';
 import About from './Components/Pages/About';
 import Summary from './Components/Pages/Summary';
+import ProtectRoute from './Components/ProtectRoute';
 
 class App extends Component {
     constructor(props) {
@@ -76,7 +77,6 @@ class App extends Component {
     };
 
     handleRegister = (username) => {
-        debugger;
         if (username !== undefined) {
             this.setState({
                 userHoldings: 100000,
@@ -89,7 +89,7 @@ class App extends Component {
     };
 
     handleLogIn = (username) => {
-        debugger;
+        // debugger;
         if (username) {
             localStorage.setItem('username', JSON.stringify(username));
             this.setState({
@@ -111,14 +111,23 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <div className="App">
-                    <Navigation isLogged={this.state.isLogged} />
+                    <Navigation
+                        isLogged={this.state.isLogged}
+                        handleLogIn={this.handleLogIn}
+                    />
                     <Switch>
                         <Route path="/" exact render={() => <Home />} />
                         <Route path="/about" exact render={() => <About />} />
-                        <Route
+                        {/* <Route
                             path="/summary"
                             exact
                             render={() => <Summary />}
+                        /> */}
+                        <ProtectRoute
+                            exact
+                            path="/summary"
+                            isUserAuthenticated={this.isUserAuthenticated()}
+                            component={() => <Summary />}
                         />
                         <Route
                             path="/register"
