@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import AlertMsgComponent from '../../AlertMesgComponent';
 
-const LogInModal = ({ show, handleClose }) => {
+const LogInModal = ({ show, handleClose, handleLogIn }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [validate, setValidate] = useState(false);
@@ -21,7 +21,7 @@ const LogInModal = ({ show, handleClose }) => {
             e.stopPropagation();
             setValidate(true);
         } else {
-            // handleLogInRequest(username, password);
+            handleLogInRequest(username, password);
         }
     };
 
@@ -36,27 +36,26 @@ const LogInModal = ({ show, handleClose }) => {
     const redirectToAccountPage = () => {
         setTimeout(() => {
             clearForm();
-            // handleLogIn(usersId, responseDataUsername);
-            history.push('/my-stocks');
+            handleClose();
+            handleLogIn(username);
+            history.push('/summary');
         }, 2500);
     };
 
     const handleLogInRequest = async (username, password) => {
-        debugger;
-        const response = await axios.post('/login', {
+        // debugger;
+        const response = await axios.put('http://127.0.0.1:8000/api/login', {
             username: username,
             password: password,
         });
-        const message = response.data[0];
-        const responseStatusCode = response.data[1];
-        const userId = response.data[2];
-        const responseUsername = response.data[3];
+        const message = response.data.message;
+        const responseStatusCode = response.data.status_code;
         setShowAlertMsg(true);
         if (responseStatusCode >= 500) {
             setErrorMessage(message);
         } else {
             setSuccessMessage(message);
-            redirectToAccountPage(userId, responseUsername);
+            redirectToAccountPage();
             // localStorage.setItem('userId', JSON.stringify(userId));
         }
     };
