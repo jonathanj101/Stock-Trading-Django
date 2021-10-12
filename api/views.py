@@ -114,6 +114,7 @@ def sell_stock(request):
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED["userSellingAmount"], user_holdings=user_holdings, user_id_id=FILTER_BY_USER.id)
             FILTER_BY_STOCK.delete()
             transaction.save()
+            FILTER_BY_USER.save()
             return Response({"message":MESSAGE, "status_code": 201})
         else:
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED["userSellingAmount"], user_holdings=user_holdings,user_id_id=FILTER_BY_USER.id)
@@ -181,12 +182,12 @@ def signup(request):
         
 
 @api_view(["PUT"])
-def login(reuqest):
+def login(request):
     DATA_RECIEVED = request.data
     USER = User.objects.filter(username=DATA_RECIEVED['username']).first()
     if USER:
         if check_password(DATA_RECIEVED["password"], USER.password):
-            return Response({"message":"You are logged in successfully! You will be redirected to your account shortly!"})
+            return Response({"message":"You are logged in successfully! You will be redirected to your account shortly!", "username":USER.username, "status_code":201})
     else:
         return Response({"message":"We don't recognice that username!", "status_code":500})
 
