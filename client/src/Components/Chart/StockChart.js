@@ -1,43 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
 
 export const StockChart = () => {
     const [stock, setData] = useState([]);
+    const [username, setUsername] = useState('');
+    const [totalInvesting, setTotalInvesting] = useState('');
 
-    const fetchHistory = async () => {
-        // debugger
-        // const response = await axios.get('http://127.0.0.1:8000/api/stocks');
-        // console.log(response);
-        const stock = 'aapl';
-        const response = await axios.get(
-            `http://127.0.0.1:8000/api/stocks/${stock}`,
+    useEffect(() => {
+        const localStorageUsername = JSON.parse(
+            localStorage.getItem('username'),
         );
-        console.log(response);
-        setData(response.data);
-    };
+        const fetchHistory = async () => {
+            const response = await axios.put(
+                `http://127.0.0.1:8000/api/stocks`,
+                {
+                    username: localStorageUsername,
+                },
+            );
+            setData(response.data.data);
+            setTotalInvesting(response.data.investing);
+            setUsername(localStorageUsername);
+        };
+        fetchHistory();
+    }, []);
 
     return (
         <div>
-            <button onClick={fetchHistory}>click ere</button>
-            <Chart
-                width={1000}
-                height={'500px'}
-                chartType="LineChart"
-                loader={<div>Loading Chart</div>}
-                data={[
-                    ['Date', 'Price'],
-                    ...stock.map((stock) => [stock.date, stock.close]),
-                ]}
-                options={{
-                    title: 'Investing',
-                    hAxis: { title: 'Year', titleTextStyle: { color: '#333' } },
-                    vAxis: { minValue: 0 },
-                    // For the legend to fit, we make the chart area smaller
-                    chartArea: { width: '50%', height: '70%' },
-                    // lineWidth: 25
-                }}
-            />
+            <div style={{ width: '100%' }}>
+                <div
+                    style={{
+                        width: '50%',
+                        margin: '0 auto 100px auto',
+                        textAlign: 'center',
+                    }}
+                >
+                    <p style={{ fontSize: '2rem' }}>Welcome {username}</p>
+                </div>
+                <div>
+                    <Chart
+                        width={'100%'}
+                        height={'500px'}
+                        chartType="PieChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['Company Name', 'Investing'],
+                            ...stock.map((stock) => [
+                                stock.companyName,
+                                stock.investing,
+                            ]),
+                        ]}
+                        options={{
+                            title: `Investing $${totalInvesting}`,
+                            chartArea: { width: '50%', height: '70%' },
+                        }}
+                    />
+                </div>
+            </div>
         </div>
     );
 };
