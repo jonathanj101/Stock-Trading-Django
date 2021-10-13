@@ -14,9 +14,6 @@ load_dotenv()
 IEX_CLOUD_API_KEY = os.environ.get("IEX_API_KEY")
 BASE_URL = "https://cloud.iexapis.com"
 
-# Create your views here.
-
-
 @api_view(["GET"])
 def fetch_news(request):
     url = f"{BASE_URL}/stable/time-series/news?range=1m&limit=30&token={IEX_CLOUD_API_KEY}"
@@ -28,16 +25,25 @@ def fetch_news(request):
 @api_view(["GET"])
 def search_stock(request, stock):
     try:
+        URL = f"{BASE_URL}/stable/search/{stock}?token={IEX_CLOUD_API_KEY}"
+        request = requests.get(URL)
+        response = request.json()
+        return Response(response)
+
+    except ValueError:
+        return Response("Stock symbol/s not found!")
+
+@api_view(["GET"])
+def stock_data(request, stock):
+    try:
         URL = f"{BASE_URL}/stable/stock/{stock}/quote?token={IEX_CLOUD_API_KEY}"
         request = requests.get(URL)
         response = request.json()
 
         data = {
-            "company_name": response["companyName"],
-                "cost": response["latestPrice"],
-                "change": response["change"],
-                "symbol": response["symbol"]
+            "cost": response["latestPrice"],
         }
+        
         return Response(data)
 
     except ValueError:
@@ -124,13 +130,13 @@ def sell_stock(request):
     else:
         return Response({"message":"Looks like there is an error on our end!", "status_code":500})
 
-@api_view(["GET"])
+@api_view(["PUT"])
 def user_stock(request):
     DATA_RECIEVED = request.data
-    FILTER_BY_USER = User.objects.filter(username="test1").first()
+    FILTER_BY_USER = User.objects.filter(username=DATA_RECIEVED['username']).first()
     FILTER_STOCK = Stock.objects.filter(user_id_id=FILTER_BY_USER.id).all()
     data = []
-
+    total_investing = 0
     if FILTER_BY_USER:
 
         for stock in FILTER_STOCK:
@@ -138,7 +144,7 @@ def user_stock(request):
             make_request = requests.get(SEARCH_STOCK)
             response = make_request.json()
             difference_in_cost = (response["latestPrice"] - stock.stock_cost) * stock.user_estimated_shares
-
+            total_investing += stock.user_estimated_cost + difference_in_cost
             objs = {
                 "companyName": stock.company_name,
                 "symbol": stock.stock_symbol,
@@ -147,12 +153,11 @@ def user_stock(request):
                 "userEstimatedHolding": stock.user_estimated_cost,
                 "differenceInCost": difference_in_cost,
                 "userHoldings": FILTER_BY_USER.user_holdings,
-                "date": stock.date,
-                "diff": stock.user_estimated_cost + difference_in_cost
+                "investing": stock.user_estimated_cost + difference_in_cost
             }
             data.append(objs)
         if data != "":
-            return Response(data)
+            return Response({"data":data,"investing":total_investing})
         else:
             return Response({"message":"An issue has occured on our end! Please try again later", "status_code": 500})
     else:
@@ -199,14 +204,3 @@ def user(request):
         return Response({"username": USER.username, "user_holdings":USER.user_holdings},201)
     else: 
         return Response({"message":"User not found on our database","status_code": 500})
-
-@api_view(["GET"])
-def stock_chart(request, stock):
-    print(stock)
-    print(IEX_CLOUD_API_KEY)
-    search_query = f"{BASE_URL}/stable/stock/{stock}/chart/5d?token={IEX_CLOUD_API_KEY}"
-    request = requests.get(search_query)
-    print(request)
-    response = request.json()
-
-    return Response(response)
