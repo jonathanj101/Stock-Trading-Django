@@ -43,7 +43,6 @@ def search_stock(request, stock):
     except ValueError:
         return Response("Stock symbol/s not found!")
 
-
 @api_view(["POST"])
 def add_stock(request):
     DATA_RECIEVED = request.data
@@ -147,7 +146,9 @@ def user_stock(request):
                 "userEstimatedShares": stock.user_estimated_shares,
                 "userEstimatedHolding": stock.user_estimated_cost,
                 "differenceInCost": difference_in_cost,
-                "userHoldings": FILTER_BY_USER.user_holdings
+                "userHoldings": FILTER_BY_USER.user_holdings,
+                "date": stock.date,
+                "diff": stock.user_estimated_cost + difference_in_cost
             }
             data.append(objs)
         if data != "":
@@ -179,7 +180,6 @@ def signup(request):
         USER = User(first_name=USER_DETAIL['firstName'], last_name=USER_DETAIL['lastName'], username=USER_DETAIL['username'], password=hashed_password, email=USER_DETAIL['email'], user_holdings=USER_DETAIL['userHoldings'])
         USER.save()
         return Response({"status_code":200} )
-        
 
 @api_view(["PUT"])
 def login(request):
@@ -199,3 +199,14 @@ def user(request):
         return Response({"username": USER.username, "user_holdings":USER.user_holdings},201)
     else: 
         return Response({"message":"User not found on our database","status_code": 500})
+
+@api_view(["GET"])
+def stock_chart(request, stock):
+    print(stock)
+    print(IEX_CLOUD_API_KEY)
+    search_query = f"{BASE_URL}/stable/stock/{stock}/chart/5d?token={IEX_CLOUD_API_KEY}"
+    request = requests.get(search_query)
+    print(request)
+    response = request.json()
+
+    return Response(response)
