@@ -118,11 +118,6 @@ class App extends Component {
                     <Switch>
                         <Route path="/" exact render={() => <Home />} />
                         <Route path="/about" exact render={() => <About />} />
-                        {/* <Route
-                            path="/summary"
-                            exact
-                            render={() => <Summary />}
-                        /> */}
                         <ProtectRoute
                             exact
                             path="/summary"
