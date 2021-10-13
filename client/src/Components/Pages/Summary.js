@@ -4,6 +4,7 @@ import axios from 'axios';
 import Sidebar from '../SideBar-Content/Sidebar';
 import SearchComponent from '../../Components/Search-Component/SearchComponent';
 import SellStockModal from '../Buy-Sell-Handlers/Sell-Stock/SellStockModal';
+import { StockChart } from '../Chart/StockChart';
 
 const Summary = () => {
     const [companyName, setCompanyName] = useState('');
@@ -95,6 +96,7 @@ const Summary = () => {
             <SearchComponent
                 getStockFromSearchAddToModal={getStockFromSearchAddToModal}
             />
+            <StockChart />
             <Sidebar />
             {items.length === 0 ? (
                 <button onClick={() => fetchSome()}>click</button>
