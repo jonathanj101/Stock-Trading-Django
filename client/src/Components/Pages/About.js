@@ -4,15 +4,18 @@ const About = () => {
     return (
         <div id="about">
             <div
-                style={{ height: '100%', width: '100%', margin: '100px auto' }}
+                style={{ height: '100%', width: '100%', margin: '150px auto' }}
             >
                 <div style={{ width: '50%', margin: 'auto' }}>
-                    <p style={{ fontSize: '2.75rem', fontWeight: 'bold' }}>
+                    <p
+                        id="about-title"
+                        style={{ fontSize: '2.75rem', fontWeight: 'bold' }}
+                    >
                         About
                     </p>
                 </div>
                 <div style={{ width: '50%', margin: 'auto' }}>
-                    <p style={{ fontSize: '2rem' }}>
+                    <p id="about-summary" style={{ fontSize: '2rem' }}>
                         This application was previously built using ReactJS and
                         Python/Flask.That particular project can be found{' '}
                         <a
@@ -23,18 +26,18 @@ const About = () => {
                             Github Repository
                         </a>
                     </p>
-                    <p style={{ fontSize: '2rem' }}>
+                    <p id="about-summary" style={{ fontSize: '2rem' }}>
                         Furthermore, for the user experience and design;
                         ReactJS, Bootstrap, Reactstrap, and React-Router was
                         used.
                     </p>
-                    <p style={{ fontSize: '2rem' }}>
+                    <p id="about-summary" style={{ fontSize: '2rem' }}>
                         For this time around, Django framework was used to
                         handle the back-end; Python, Django
                         (Django-Restframework, Views, Hashers, Decorators),
                         Requests to handle communication to the IEX Cloud API.
                     </p>
-                    <p style={{ fontSize: '2rem' }}>
+                    <p id="about-summary" style={{ fontSize: '2rem' }}>
                         As for the external API used for this application;{' '}
                         <a
                             rel="noreferrer"
