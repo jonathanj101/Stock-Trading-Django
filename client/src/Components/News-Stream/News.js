@@ -4,24 +4,17 @@ import { Card } from 'react-bootstrap';
 
 const News = () => {
     const [news, setNews] = useState([]);
-    const [isNews, setIsNews] = useState(false);
 
-    // useEffect(() => {
-    //     if (isNews) {
-    //         fetchNews()
-    //     } else {
-    //         setIsNews(true)
-    //     }
-    // }, [isNews])
+    useEffect(() => {
+        const fetchNews = async () => {
+            const response = await axios.get('http://127.0.0.1:8000/api/news');
+            console.log(response);
+            setNews(response.data);
+        };
+        fetchNews();
+    }, []);
 
-    const fetchNews = async () => {
-        const response = await axios.get('http://127.0.0.1:8000/api/news');
-        console.log(response);
-        setNews(response.data);
-    };
-
-    const table = news.map((item, num) => {
-        console.log(item, num);
+    const newsData = news.map((item, num) => {
         return (
             <Card style={{ width: '100%' }} key={num}>
                 <Card.Img src={item.image} />
@@ -45,7 +38,7 @@ const News = () => {
                 <p style={{ fontSize: '2.75rem' }}>News</p>
             </div>
             <div
-                id="news-div"
+                id="news_div"
                 style={{
                     width: '25%',
                     margin: 'auto',
@@ -53,7 +46,7 @@ const News = () => {
                     height: '1000px',
                 }}
             >
-                {/* {table} */}
+                {newsData}
             </div>
         </div>
     );
