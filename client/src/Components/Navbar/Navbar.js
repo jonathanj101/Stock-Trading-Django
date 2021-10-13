@@ -16,7 +16,7 @@ const Navigation = ({ isLogged, handleLogIn }) => {
                 handleClose={handleClose}
                 handleLogIn={handleLogIn}
             />
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
                 <Container>
                     <Navbar.Brand href="/">FST</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -27,8 +27,9 @@ const Navigation = ({ isLogged, handleLogIn }) => {
                         <Nav className="me-auto">
                             <Nav.Link href="/about">About</Nav.Link>
                             {isLogged ? (
-                                <div>
+                                <div id="navbar-items">
                                     <Nav.Link href="/summary">Summary</Nav.Link>
+                                    <Nav.Link href="/trade">Trade</Nav.Link>
                                 </div>
                             ) : (
                                 <div>
