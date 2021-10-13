@@ -33,28 +33,32 @@ const BuyStockModal = ({
     const [isStockQuantity, setIsStockQuantity] = useState(true);
     const [stockInputValue, setStockInputValue] = useState('');
     const [userHoldings, setUserHoldings] = useState('');
-    const localStorageUsername = JSON.parse(localStorage.getItem('username'));
+    const [isUserHoldingsFetched, setHoldingsFetched] = useState(false);
+    const [news, setNews] = useState([]);
 
     useEffect(() => {
-        fetchUserHoldings();
-    }, []);
-
-    const fetchUserHoldings = async () => {
-        try {
-            if (localStorageUsername !== null) {
-                const response = await axios.put(
-                    'http://127.0.0.1:8000/api/user',
-                    {
-                        username: localStorageUsername,
-                    },
-                );
-                console.log(response);
-                setUserHoldings(response.data.user_holdings);
-            }
-        } catch (error) {
-            console.log(error);
+        if (isUserHoldingsFetched === false) {
+            const localStorageUsername = JSON.parse(
+                localStorage.getItem('username'),
+            );
+            const fetchUserHoldings = async () => {
+                try {
+                    const response = await axios.put(
+                        'http://127.0.0.1:8000/api/user',
+                        {
+                            username: localStorageUsername,
+                        },
+                    );
+                    setUserHoldings(response.data.user_holdings);
+                } catch (error) {
+                    console.log(error);
+                }
+            };
+            fetchUserHoldings();
+        } else {
+            return;
         }
-    };
+    }, [isUserHoldingsFetched]);
 
     const handleSubmit = () => {
         if (stockInputValue <= userHoldings) {
@@ -76,7 +80,7 @@ const BuyStockModal = ({
         const localStorageUsername = JSON.parse(
             localStorage.getItem('username'),
         );
-        const parsed = parseFloat(stockPrice.slice(1));
+        const parsed = stockPrice;
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/buy', {
                 username: localStorageUsername,
@@ -109,9 +113,7 @@ const BuyStockModal = ({
 
     const calculateOnTitleChange = () => {
         const parseStockInputValue = parseFloat(stockInputValue);
-        const parseSliceStockCost = stockPrice.includes('.')
-            ? parseFloat(stockPrice.slice(1))
-            : parseInt(stockPrice.slice(1));
+        const parseSliceStockCost = stockPrice;
 
         if (!isStockQuantity) {
             const totalShares = parseStockInputValue / parseSliceStockCost;
@@ -137,9 +139,7 @@ const BuyStockModal = ({
     const calculateCost = (stockInput) => {
         const { value } = stockInput.currentTarget;
         let parseStockInput = parseFloat(value);
-        const parseSliceStockCost = stockPrice.includes('.')
-            ? parseFloat(stockPrice.slice(1))
-            : parseInt(stockPrice.slice(1));
+        const parseSliceStockCost = stockPrice;
         if (isStockQuantity) {
             const totalShares = parseStockInput / parseSliceStockCost;
             if (!isNaN(totalShares)) {
