@@ -24,8 +24,6 @@ const SellStockModal = ({
     const [successMessage, setSuccessMessage] = useState('');
     const localStorageUsername = JSON.parse(localStorage.getItem('username'));
 
-    console.log(stockName, estimatedShares, userHoldings);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const form = e.currentTarget;
