@@ -10,6 +10,7 @@ import Footer from './Components/Footer';
 import About from './Components/Pages/About';
 import Summary from './Components/Pages/Summary';
 import ProtectRoute from './Components/ProtectRoute';
+import Trade from './Components/Pages/Trade';
 
 class App extends Component {
     constructor(props) {
@@ -123,6 +124,12 @@ class App extends Component {
                             path="/summary"
                             isUserAuthenticated={this.isUserAuthenticated()}
                             component={() => <Summary />}
+                        />
+                        <ProtectRoute
+                            exact
+                            path="/trade"
+                            isUserAuthenticated={this.isUserAuthenticated()}
+                            component={() => <Trade />}
                         />
                         <Route
                             path="/register"
