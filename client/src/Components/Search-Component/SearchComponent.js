@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, InputGroup, ListGroup } from 'react-bootstrap';
 import BuyStockModal from '../Buy-Sell-Handlers/Buy-Stock/BuyStockModal';
@@ -11,6 +12,7 @@ const SearchComponent = ({ getStockFromSearchAddToModal }) => {
     const [companyName, setCompanyName] = useState('');
     const [isStockSearched, setIsStockSearched] = useState(false);
     const [showBuyStockModal, setBuyStockModal] = useState(false);
+    const [stocks, setStocks] = useState([]);
 
     const getTextInput = (e) => {
         const { value } = e.currentTarget;
@@ -23,34 +25,58 @@ const SearchComponent = ({ getStockFromSearchAddToModal }) => {
         }
     };
 
-    const sendRequestOnTextInput = (textInput) => {
-        console.log(textInput);
-        fetch(`http://127.0.0.1:8000/api/search/${textInput}`)
-            .then((resp) => resp.json())
-            .then((data) => {
-                setCompanyName(data.company_name);
-                setStockSymbol(data.symbol);
-                setStockPrice(`$${data.cost}`);
-            });
+    const sendRequestOnTextInput = async (textInput) => {
+        const response = await axios.get(
+            `http://127.0.0.1:8000/api/search/${textInput}`,
+        );
+        setStocks(response.data);
     };
 
-    const onSelect = () => {
-        console.log(companyName);
-        handleShow();
-        getStockFromSearchAddToModal(
-            companyName,
-            stockSymbol,
-            stockPrice,
-            stockChange,
+    const requestStockData = async (stock) => {
+        const response = await axios.get(
+            `http://127.0.0.1:8000/api/search/stock/${stock}`,
         );
+        setStockPrice(response.data.cost);
+    };
+
+    const onSelect = (stock) => {
+        setCompanyName(stock.name);
+        setStockSymbol(stock.symbol);
+        requestStockData(stock.symbol);
+        handleShow();
     };
 
     const handleShow = () => {
         setBuyStockModal(true);
     };
 
+    const stocksArray = stocks.map((stock, num) => {
+        return (
+            <ListGroup id="search-item-container" key={num}>
+                <ListGroup.Item
+                    id="search-item-div"
+                    onClick={() => onSelect(stock)}
+                    className=""
+                    action
+                    variant=""
+                >
+                    <div
+                        id="search-item"
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <span>{stock.symbol}</span>
+                        <span>{stock.name}</span>
+                    </div>
+                </ListGroup.Item>
+            </ListGroup>
+        );
+    });
+
     return (
-        <div id="search">
+        <div id="search" style={{ marginBottom: '100px' }}>
             <BuyStockModal
                 showBuyStockModal={showBuyStockModal}
                 stockSymbol={stockSymbol}
@@ -77,31 +103,7 @@ const SearchComponent = ({ getStockFromSearchAddToModal }) => {
                         </InputGroup.Text>
                     </InputGroup.Prepend>
                 </InputGroup>
-                {isStockSearched ? (
-                    <ListGroup id="search-item-container">
-                        <ListGroup.Item
-                            id="search-item-div"
-                            onClick={(e) => onSelect(e)}
-                            className=""
-                            action
-                            variant=""
-                        >
-                            <div
-                                id="search-item"
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <span>{stockSymbol}</span>
-                                <span>{companyName}</span>
-                                <span>{stockPrice}</span>
-                            </div>
-                        </ListGroup.Item>
-                    </ListGroup>
-                ) : (
-                    <div></div>
-                )}
+                {isStockSearched ? stocksArray : <div></div>}
             </Form.Group>
         </div>
     );
