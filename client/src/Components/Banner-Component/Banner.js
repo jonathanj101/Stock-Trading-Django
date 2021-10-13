@@ -5,6 +5,7 @@ const Banner = () => {
         <div id="banner-component" style={{ width: '50%', margin: 'auto' }}>
             <div>
                 <p
+                    id="banner-title"
                     style={{
                         fontSize: '2.75rem',
                         width: 'fit-content',
@@ -14,7 +15,7 @@ const Banner = () => {
                     Start Investing
                 </p>
             </div>
-            <div style={{ textAlign: 'center' }}>
+            <div id="banner-catchphrase" style={{ textAlign: 'center' }}>
                 <p style={{ fontSize: '1.25rem' }}>
                     If not registered, what are you waiting for?
                 </p>
