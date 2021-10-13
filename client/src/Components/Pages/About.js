@@ -32,8 +32,7 @@ const About = () => {
                         For this time around, Django framework was used to
                         handle the back-end; Python, Django
                         (Django-Restframework, Views, Hashers, Decorators),
-                        Requests to handle client side communication to the
-                        server.
+                        Requests to handle communication to the IEX Cloud API.
                     </p>
                     <p style={{ fontSize: '2rem' }}>
                         As for the external API used for this application;{' '}
