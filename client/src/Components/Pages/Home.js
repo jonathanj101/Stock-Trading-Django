@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import React from 'react';
 import News from '../../Components/News-Stream/News';
 import Banner from '../Banner-Component/Banner';
 
@@ -10,7 +9,6 @@ const Home = () => {
             style={{ height: '100%', width: '100%', margin: '100px auto' }}
         >
             <Banner />
-            {/* <div style={{ margin: '100px auto' }}> */}
             <News />
         </div>
     );
