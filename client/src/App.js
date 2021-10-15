@@ -48,24 +48,6 @@ class App extends Component {
         }
     }
 
-    // async componentDidUpdate(prevProps, prevState) {
-    //     const localStorageUsername = JSON.parse(localStorage.getItem('userId'));
-    //     if (this.state.userHoldings !== prevState.userHoldings) {
-    //         const response = await axios
-    //             .post('/user', {
-    //                 id: localStorageUsername,
-    //             })
-    //             .then((data) => {
-    //                 return data.data;
-    //             });
-    //         this.setState({
-    //             id: localStorageUsername,
-    //             username: response.username,
-    //             userHoldings: response.user_holdings,
-    //         });
-    //     }
-    // }
-
     isUserAuthenticated = () => {
         const localStorageUsername = JSON.parse(
             localStorage.getItem('username'),
@@ -90,7 +72,6 @@ class App extends Component {
     };
 
     handleLogIn = (username) => {
-        // debugger;
         if (username) {
             localStorage.setItem('username', JSON.stringify(username));
             this.setState({
