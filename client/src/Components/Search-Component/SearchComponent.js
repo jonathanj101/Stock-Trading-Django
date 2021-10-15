@@ -2,12 +2,10 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Form, InputGroup, ListGroup } from 'react-bootstrap';
 import BuyStockModal from '../Buy-Sell-Handlers/Buy-Stock/BuyStockModal';
-// import { styles } from './SearchComponentStyles';
 
-const SearchComponent = ({ getStockFromSearchAddToModal }) => {
+const SearchComponent = () => {
     const [textInput, setTextInput] = useState('');
     const [stockPrice, setStockPrice] = useState('');
-    const [stockChange, setStockChange] = useState('');
     const [stockSymbol, setStockSymbol] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [isStockSearched, setIsStockSearched] = useState(false);
