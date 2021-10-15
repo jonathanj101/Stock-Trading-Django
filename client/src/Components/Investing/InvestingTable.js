@@ -85,7 +85,7 @@ const InvestingTable = ({ data }) => {
                 <tbody>
                     {data.length === 0 ? (
                         <tr>
-                            <h1>GO BIG OR GO HOME!</h1>
+                            <td>GO BIG OR GO HOME!</td>
                         </tr>
                     ) : (
                         tableRows
