@@ -8,6 +8,7 @@ export const StockChart = () => {
     const [totalInvesting, setTotalInvesting] = useState('');
 
     useEffect(() => {
+        let isMountedComponent = true;
         const localStorageUsername = JSON.parse(
             localStorage.getItem('username'),
         );
@@ -18,11 +19,16 @@ export const StockChart = () => {
                     username: localStorageUsername,
                 },
             );
-            setData(response.data.data);
-            setTotalInvesting(response.data.investing);
-            setUsername(localStorageUsername);
+            if (isMountedComponent) {
+                setData(response.data.data);
+                setTotalInvesting(response.data.investing);
+                setUsername(localStorageUsername);
+            }
         };
         fetchHistory();
+        return () => {
+            isMountedComponent = false;
+        };
     }, []);
 
     return (
