@@ -5,23 +5,10 @@ import AlertMsgComponent from '../../../Components/AlertMesgComponent';
 
 const BuyStockModal = ({
     showBuyStockModal,
-    // setIsStockQuantity,
-    // calculateCost,
-    // calculateOnTitleChange,
-    // handleUserStockInput,
-    // estimatedCost,
-    // estimatedShares,
-    // isStockQuantity,
     stockName,
     stockSymbol,
     stockPrice,
-    // addStock,
-    // setStockInputValue,
-    // setEstimatedShares,
-    // setEstimatedCost,
     handleClose,
-    // userHoldings,
-    // stockInputValue,
 }) => {
     const [dropdownTitle, setDropdownTitle] = useState('Dollars');
     const [dropdownItemTitle, setDropdownItemTitle] = useState('Shares');
@@ -33,37 +20,34 @@ const BuyStockModal = ({
     const [isStockQuantity, setIsStockQuantity] = useState(true);
     const [stockInputValue, setStockInputValue] = useState('');
     const [userHoldings, setUserHoldings] = useState('');
-    const [isUserHoldingsFetched, setHoldingsFetched] = useState(false);
-    const [news, setNews] = useState([]);
 
     useEffect(() => {
-        if (isUserHoldingsFetched === false) {
-            const localStorageUsername = JSON.parse(
-                localStorage.getItem('username'),
-            );
-            const fetchUserHoldings = async () => {
-                try {
-                    const response = await axios.put(
-                        'http://127.0.0.1:8000/api/user',
-                        {
-                            username: localStorageUsername,
-                        },
-                    );
+        let isMountedComponent = true;
+        const localStorageUsername = JSON.parse(
+            localStorage.getItem('username'),
+        );
+        const fetchUserHoldings = async () => {
+            try {
+                const response = await axios.put(
+                    'http://127.0.0.1:8000/api/user',
+                    {
+                        username: localStorageUsername,
+                    },
+                );
+                if (isMountedComponent) {
                     setUserHoldings(response.data.user_holdings);
-                } catch (error) {
-                    console.log(error);
                 }
-            };
-            fetchUserHoldings();
-        } else {
-            return;
-        }
-    }, [isUserHoldingsFetched]);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchUserHoldings();
+        return () => (isMountedComponent = false);
+    }, []);
 
     const handleSubmit = () => {
         if (stockInputValue <= userHoldings) {
             onBuyHandler();
-            // addStock();
             setTimeout(() => {
                 handleClose();
             }, 2000);
@@ -189,7 +173,7 @@ const BuyStockModal = ({
                     />
                     <div>
                         <div>
-                            {stockSymbol} = {stockPrice}
+                            {stockSymbol} = ${stockPrice}
                         </div>
                         <div className="mx-auto w-50 mt-5 mb-5">
                             <div className="d-flex justify-content-center">
