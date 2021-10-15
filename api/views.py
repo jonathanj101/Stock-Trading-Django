@@ -168,10 +168,6 @@ def signup(request):
     USER_DETAIL = request.data
     FILTER_BY_USERNAME = User.objects.filter(username=USER_DETAIL['username']).first()
     FILTER_BY_EMAIL = User.objects.filter(email=USER_DETAIL['email']).first()
-    print(USER_DETAIL)
-    print(USER_DETAIL['username'])
-    print(FILTER_BY_USERNAME)
-    print(FILTER_BY_EMAIL)
 
     if request.method == "PUT":
         if FILTER_BY_USERNAME is not None:
