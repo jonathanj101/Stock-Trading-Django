@@ -43,7 +43,6 @@ const LogInModal = ({ show, handleClose, handleLogIn }) => {
     };
 
     const handleLogInRequest = async (username, password) => {
-        // debugger;
         const response = await axios.put('http://127.0.0.1:8000/api/login', {
             username: username,
             password: password,
@@ -56,7 +55,6 @@ const LogInModal = ({ show, handleClose, handleLogIn }) => {
         } else {
             setSuccessMessage(message);
             redirectToAccountPage();
-            // localStorage.setItem('userId', JSON.stringify(userId));
         }
     };
 
