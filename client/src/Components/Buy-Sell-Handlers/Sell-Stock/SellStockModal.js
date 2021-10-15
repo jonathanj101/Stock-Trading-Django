@@ -11,7 +11,6 @@ const SellStockModal = ({
     estimatedCost,
     estimatedShares,
     userHoldings,
-    setCounter,
     differenceInCost,
 }) => {
     const [userSellingAmount, setUserSellingAmount] = useState('');
@@ -36,7 +35,6 @@ const SellStockModal = ({
             setTimeout(() => {
                 handleCloseSellModal();
                 clearForm();
-                // setCounter(true);
             }, 2000);
         }
     };
