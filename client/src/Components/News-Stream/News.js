@@ -4,15 +4,24 @@ import { Card } from 'react-bootstrap';
 
 const News = () => {
     const [news, setNews] = useState([]);
+    const [isNews, setIsNews] = useState(false);
 
     useEffect(() => {
+        let isMountedComponent = true;
         const fetchNews = async () => {
-            const response = await axios.get('http://127.0.0.1:8000/api/news');
-            console.log(response);
-            setNews(response.data);
+            if (isNews === false) {
+                const response = await axios.get(
+                    'http://127.0.0.1:8000/api/news',
+                );
+                if (isMountedComponent) {
+                    setIsNews(true);
+                    setNews(response.data);
+                }
+            }
         };
         fetchNews();
-    }, []);
+        return () => (isMountedComponent = false);
+    }, [isNews]);
 
     const newsData = news.map((item, num) => {
         return (
