@@ -8,6 +8,7 @@ const Summary = () => {
     const [stocksData, setStocksData] = useState([]);
 
     useEffect(() => {
+        let isMountedComponent = true;
         const localStorageUsername = JSON.parse(
             localStorage.getItem('username'),
         );
@@ -18,9 +19,12 @@ const Summary = () => {
                     username: localStorageUsername,
                 },
             );
-            setStocksData(response.data.data);
+            if (isMountedComponent) {
+                setStocksData(response.data.data);
+            }
         };
         fetchUserStocks();
+        return () => (isMountedComponent = false);
     }, []);
 
     return (
