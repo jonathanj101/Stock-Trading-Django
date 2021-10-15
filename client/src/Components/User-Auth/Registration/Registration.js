@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import AlertMsgComponent from '../../AlertMesgComponent';
 
@@ -75,17 +75,14 @@ const FormComponent = ({ handleRegister }) => {
             const message = response.data.message;
 
             if (statusCode <= 201) {
-                const response = await axios.post(
-                    'http://127.0.0.1:8000/api/signup',
-                    {
-                        firstName: firstName,
-                        lastName: lastName,
-                        password: password,
-                        username: username,
-                        email: email,
-                        userHoldings: 100000,
-                    },
-                );
+                await axios.post('http://127.0.0.1:8000/api/signup', {
+                    firstName: firstName,
+                    lastName: lastName,
+                    password: password,
+                    username: username,
+                    email: email,
+                    userHoldings: 100000,
+                });
                 localStorage.setItem('username', JSON.stringify(username));
                 setSuccessMessage(message);
                 redirectToAccountPage(username);
