@@ -25,7 +25,7 @@
 
 @media screen and (max-width: 4000px) {
     div#footer {
-        height: 30vh !important;
+        height: 50vh !important;
     }
 } 
 
@@ -66,5 +66,8 @@
 
 }
 
-/* @media screen and (max-width: 400px) {
-} */
+@media screen and (max-width: 400px) {
+    div#footer {
+        height: 40vh !important
+    }
+}
