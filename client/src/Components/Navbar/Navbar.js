@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import LogInModal from '../User-Auth/Log-In/LogInModal';
 
-const Navigation = ({ isLogged, handleLogIn }) => {
+const Navigation = ({ isLogged, handleLogIn, handleLogOut }) => {
     const [show, setShow] = useState(false);
+    const history = useHistory();
 
     const handleClose = () => {
         setShow(false);
@@ -18,7 +20,7 @@ const Navigation = ({ isLogged, handleLogIn }) => {
             />
             <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="/">FST</Navbar.Brand>
+                    <Navbar.Brand href="/">Fantasy Stock Trading</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse
                         id="responsive-navbar-nav"
@@ -37,6 +39,18 @@ const Navigation = ({ isLogged, handleLogIn }) => {
                                         Log In
                                     </Nav.Link>
                                 </div>
+                            )}
+                            {isLogged ? (
+                                <Nav.Link
+                                    onClick={() => {
+                                        history.push('/');
+                                        handleLogOut();
+                                    }}
+                                >
+                                    Log Out
+                                </Nav.Link>
+                            ) : (
+                                <div></div>
                             )}
                         </Nav>
                     </Navbar.Collapse>
