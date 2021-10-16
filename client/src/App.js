@@ -87,6 +87,7 @@ class App extends Component {
             username: '',
             isLogged: false,
         });
+        localStorage.clear();
     };
 
     render() {
@@ -96,6 +97,7 @@ class App extends Component {
                     <Navigation
                         isLogged={this.state.isLogged}
                         handleLogIn={this.handleLogIn}
+                        handleLogOut={this.handleLogOut}
                     />
                     <Switch>
                         <Route path="/" exact render={() => <Home />} />
