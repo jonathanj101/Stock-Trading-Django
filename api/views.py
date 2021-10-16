@@ -3,6 +3,7 @@ import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.mail import send_mail
 from .models import User, Stock, Transactions
 
 
@@ -200,3 +201,15 @@ def user(request):
         return Response({"username": USER.username, "user_holdings":USER.user_holdings},201)
     else: 
         return Response({"message":"User not found on our database","status_code": 500})
+
+@api_view(["POST"])
+def transaction_receipt(request):
+    user_info = request.data
+
+    send_mail(
+        user_info["userFullName"],
+        f"From user {user_info['eMail']} \n \n\n{user_info['message']}",
+        user_info["eMail"],
+        [os.environ["ENV_EMAIL"]])
+
+    return Response(201)
