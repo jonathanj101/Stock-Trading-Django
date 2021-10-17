@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import SellStockModal from '../Buy-Sell-Handlers/Sell-Stock/SellStockModal';
 
-const InvestingTable = ({ data }) => {
+const InvestingTable = ({ data, setIsSelling, isSelling }) => {
     const [companyName, setCompanyName] = useState('');
     const [stockSymbol, setStockSymbol] = useState('');
     const [stockCost, setStockCost] = useState('');
@@ -68,6 +68,7 @@ const InvestingTable = ({ data }) => {
                 estimatedShares={estimatedShares}
                 estimatedCost={estimatedCost}
                 differenceInCost={differenceInCost}
+                setIsSelling={setIsSelling}
             />
             <Table
                 style={{ width: '50%', margin: 'auto', textAlign: 'center' }}
