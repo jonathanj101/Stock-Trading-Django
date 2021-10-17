@@ -6,6 +6,7 @@ import InvestingTable from '../Investing/InvestingTable';
 
 const Summary = () => {
     const [stocksData, setStocksData] = useState([]);
+    const [isSelling, setIsSelling] = useState(false);
 
     useEffect(() => {
         let isMountedComponent = true;
@@ -25,12 +26,16 @@ const Summary = () => {
         };
         fetchUserStocks();
         return () => (isMountedComponent = false);
-    }, []);
+    }, [isSelling]);
 
     return (
         <div id="summary-component">
-            <StockChart />
-            <InvestingTable data={stocksData} />
+            <StockChart isSelling={isSelling} />
+            <InvestingTable
+                data={stocksData}
+                setIsSelling={setIsSelling}
+                isSelling={isSelling}
+            />
             <News />
         </div>
     );
