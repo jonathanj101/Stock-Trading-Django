@@ -22,8 +22,11 @@
 ![](./Images/buy-modal-example.png)
 ![](./Images/sell-modal-example.png)
 
+## Transaction Receipt send to user Email
+![](./Images/email-preview.png)
+
 ## Summary
 
-The reason to re-made this project was to understand and go in depth about Django Framework. Thus, knowing it's capabilities more thorough and it's weaknesses as a framework. I needed to figure out a way to handle "unknown" routes or url that Django does not recognized. This led me to create a url on the server that when Django recieves a request with an unrecognizable url pattern, the server will send it to React (client side) where these type of scenario would be handle more easier. 
+The reason of re-making this project was to understand and go in depth about Django Framework. Thus, knowing it's capabilities more thorough and it's weaknesses as a framework. I needed to figure out a way to handle "unknown" routes or url that Django does not recognized. This led me to create a url on the server that when Django recieves a request with an unrecognizable url pattern, the server will send it to React (client side) where these type of scenario would be handle more easier.
 
 
