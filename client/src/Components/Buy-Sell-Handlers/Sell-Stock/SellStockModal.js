@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
 import AlertMsgComponent from '../../AlertMesgComponent';
+import transactionReceipt from '../../../Transaction-Receipt/transactionReceipt';
 
 const SellStockModal = ({
     showSellStockModal,
@@ -12,6 +13,7 @@ const SellStockModal = ({
     estimatedShares,
     userHoldings,
     differenceInCost,
+    setIsSelling,
 }) => {
     const [userSellingAmount, setUserSellingAmount] = useState('');
     const [userInput, setUserInput] = useState('');
@@ -40,7 +42,6 @@ const SellStockModal = ({
     };
 
     const onSellHandler = async () => {
-        debugger;
         const response = await axios.post(
             'http://127.0.0.1:8000/api/sell-stock',
             {
@@ -54,6 +55,14 @@ const SellStockModal = ({
         const message = response.data.message;
         setSuccessMessage(message);
         setShow(true);
+        transactionReceipt(
+            localStorageUsername,
+            stockName,
+            stockSymbol,
+            userSellingAmount,
+            userSellingAmount,
+        );
+        setIsSelling(true);
     };
 
     const clearForm = () => {
@@ -78,7 +87,6 @@ const SellStockModal = ({
     };
 
     const calculateAmountSellingOnInputChange = (value) => {
-        debugger;
         const parsedEstimatedCost = parseFloat(estimatedCost);
         const totalProfit = parseFloat(differenceInCost) + parsedEstimatedCost;
         const totalSelling = totalProfit - value;
@@ -103,7 +111,6 @@ const SellStockModal = ({
     };
 
     const sellAll = () => {
-        debugger;
         const parsedEstimatedCost = parseFloat(estimatedCost);
         const parsedDifInCost = parseFloat(differenceInCost);
         const totalProfit = parsedDifInCost + parsedEstimatedCost;
