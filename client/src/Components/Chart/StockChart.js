@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
 
-export const StockChart = () => {
+export const StockChart = ({ isSelling }) => {
     const [stock, setData] = useState([]);
     const [username, setUsername] = useState('');
     const [totalInvesting, setTotalInvesting] = useState('');
@@ -29,7 +29,7 @@ export const StockChart = () => {
         return () => {
             isMountedComponent = false;
         };
-    }, []);
+    }, [isSelling]);
 
     return (
         <div>
