@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Modal, DropdownButton, Dropdown, Form } from 'react-bootstrap';
 import AlertMsgComponent from '../../../Components/AlertMesgComponent';
+import transactionReceipt from '../../../Transaction-Receipt/transactionReceipt';
 
 const BuyStockModal = ({
     showBuyStockModal,
@@ -60,7 +61,6 @@ const BuyStockModal = ({
     };
 
     const onBuyHandler = async () => {
-        debugger;
         const localStorageUsername = JSON.parse(
             localStorage.getItem('username'),
         );
@@ -78,6 +78,14 @@ const BuyStockModal = ({
             setShowAlertMessageComponent(true);
             const message = response.data.message;
             setSuccessMessage(message);
+            transactionReceipt(
+                localStorageUsername,
+                stockName,
+                stockSymbol,
+                estimatedCost,
+                estimatedShares,
+            );
+            handleCloseModal();
         } catch (error) {
             console.log(error);
         }
