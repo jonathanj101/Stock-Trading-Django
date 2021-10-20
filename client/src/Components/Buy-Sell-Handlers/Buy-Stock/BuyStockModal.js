@@ -85,6 +85,7 @@ const BuyStockModal = ({
                 estimatedCost,
                 estimatedShares,
             );
+            setUserHoldings(response.data.user_holdings);
             handleCloseModal();
         } catch (error) {
             console.log(error);
