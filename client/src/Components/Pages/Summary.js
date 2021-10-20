@@ -30,7 +30,7 @@ const Summary = () => {
 
     return (
         <div id="summary-component">
-            <StockChart isSelling={isSelling} />
+            <StockChart isSelling={isSelling} setIsSelling={setIsSelling} />
             <InvestingTable
                 data={stocksData}
                 setIsSelling={setIsSelling}
