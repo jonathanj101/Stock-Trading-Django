@@ -1,0 +1,13 @@
+{
+    "name": "stock-trading-django",
+    "version": "1.0.1",
+    "description": "Stock Trading App W/ Django",
+    "private": true,
+    "scripts": {
+        "heroku-prebuild": "cd client && npm install && npm run build && cd .."
+    },
+    "engines": {
+        "node": "14.15.4",
+        "npm": "6.14.10"
+    }
+}
