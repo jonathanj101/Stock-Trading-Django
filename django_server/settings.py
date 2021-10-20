@@ -4,11 +4,11 @@ import django_heroku
 import dj_database_url
 from pathlib import Path
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -75,8 +75,8 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
+# if DEBUG:
+DATABASES = {
     'default': {
         'ENGINE': os.environ.get("ENGINE"),
         'NAME': os.environ.get("NAME"),
@@ -86,9 +86,9 @@ if DEBUG:
         'PORT': os.environ.get("PORT")
         }
     }
-else:
-    DATABASES={}
-    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+# else:
+    # DATABASES={}
+    # DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
@@ -144,7 +144,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:3001","http://127.0.0.1:8000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:3001","http://localhost:8000","http://127.0.0.1:8000"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
