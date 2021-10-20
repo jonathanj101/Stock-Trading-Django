@@ -133,7 +133,7 @@ REACT_APP_PATH = os.path.join(BASE_DIR,"client")
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(REACT_APP_PATH, 'build/static')] 
 else:
-    STATIC_ROOT = os.path.join(REACT_APP_PATH,"build/static")
+    STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
