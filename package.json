@@ -4,7 +4,7 @@
     "description": "Stock Trading App W/ Django",
     "private": true,
     "scripts": {
-        "heroku-prebuild": "cd client && npm install && npm run build && cd ../"
+        "heroku-prebuild": "cd client && npm install && npm run build && cd ../ "
     },
     "engines": {
         "node": "14.15.4",

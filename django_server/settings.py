@@ -19,7 +19,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1","stock-trading-django.herokuapp"]
 
 
 # Application definition
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     "api.apps.ApiConfig",
@@ -88,6 +89,16 @@ if DEBUG:
         }
     }
 else:
+    # DATABASES = {
+    # 'default': {
+    #     'ENGINE': os.environ.get("ENGINE"),
+    #     'NAME': os.environ.get("NAME"),
+    #     'USER': os.environ.get("USER"),
+    #     'PASSWORD': os.environ.get("PASSWORD"),
+    #     'HOST': os.environ.get("HOST"),
+    #     'PORT': os.environ.get("PORT")
+    #     }
+    # }
     DATABASES={}
     DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 
@@ -134,9 +145,10 @@ REACT_APP_PATH = os.path.join(BASE_DIR,"client")
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(REACT_APP_PATH, 'build/static')] 
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+print(STATIC_ROOT)
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
