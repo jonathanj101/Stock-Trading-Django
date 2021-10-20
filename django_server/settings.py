@@ -76,8 +76,8 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# if DEBUG:
-DATABASES = {
+if DEBUG:
+    DATABASES = {
     'default': {
         'ENGINE': os.environ.get("ENGINE"),
         'NAME': os.environ.get("NAME"),
@@ -87,9 +87,9 @@ DATABASES = {
         'PORT': os.environ.get("PORT")
         }
     }
-# else:
-    # DATABASES={}
-    # DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+else:
+    DATABASES={}
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 
 
 # Password validation
@@ -137,7 +137,6 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 
 
