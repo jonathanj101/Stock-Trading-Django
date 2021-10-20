@@ -2,33 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { Chart } from 'react-google-charts';
 import axios from 'axios';
 
-export const StockChart = ({ isSelling }) => {
+export const StockChart = ({ isSelling, setIsSelling }) => {
     const [stock, setData] = useState([]);
     const [username, setUsername] = useState('');
     const [totalInvesting, setTotalInvesting] = useState('');
 
     useEffect(() => {
         let isMountedComponent = true;
-        const localStorageUsername = JSON.parse(
-            localStorage.getItem('username'),
-        );
-        const fetchHistory = async () => {
-            const response = await axios.put(
-                `http://127.0.0.1:8000/api/stocks`,
-                {
-                    username: localStorageUsername,
-                },
+        if (isSelling) {
+            setIsSelling(false);
+        } else {
+            const localStorageUsername = JSON.parse(
+                localStorage.getItem('username'),
             );
-            if (isMountedComponent) {
-                setData(response.data.data);
-                setTotalInvesting(response.data.investing);
-                setUsername(localStorageUsername);
-            }
-        };
-        fetchHistory();
-        return () => {
-            isMountedComponent = false;
-        };
+            const fetchHistory = async () => {
+                const response = await axios.put(
+                    `http://127.0.0.1:8000/api/stocks`,
+                    {
+                        username: localStorageUsername,
+                    },
+                );
+                if (isMountedComponent) {
+                    setData(response.data.data);
+                    setTotalInvesting(response.data.investing);
+                    setUsername(localStorageUsername);
+                }
+            };
+            fetchHistory();
+            return () => {
+                isMountedComponent = false;
+            };
+        }
     }, [isSelling]);
 
     return (
