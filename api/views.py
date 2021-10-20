@@ -75,7 +75,7 @@ def add_stock(request):
             FILTER_BY_USER.save()
             FILTER_BY_STOCK.save()
 
-            return Response({"message":"Success! Stock added!", "status_code":201})
+            return Response({"message":"Success! Stock added!", "status_code":201,"user_holdings":FILTER_BY_USER.user_holdings})
         else:
             user_holdings = FILTER_BY_USER.user_holdings - DATA_RECIEVED['estimatedCost']
             FILTER_BY_USER.user_holdings = user_holdings
@@ -88,7 +88,7 @@ def add_stock(request):
             transaction.save()
             FILTER_BY_USER.save()
             
-            return Response({"message":"Success! Stock updated!", "status_code":201})
+            return Response({"message":"Success! Stock updated!", "status_code":201,"user_holdings":FILTER_BY_USER.user_holdings})
 
     return Response({"message":"Something went wrong on out end! Please try again!", "status_code":500})
 
@@ -121,13 +121,13 @@ def sell_stock(request):
             FILTER_BY_STOCK.delete()
             transaction.save()
             FILTER_BY_USER.save()
-            return Response({"message":MESSAGE, "status_code": 201})
+            return Response({"message":MESSAGE, "status_code": 201, "user_holdings":FILTER_BY_USER.user_holdings})
         else:
             transaction = Transactions(company_name=DATA_RECIEVED["companyName"], user_estimated_cost=DATA_RECIEVED["userSellingAmount"], user_holdings=user_holdings,user_id_id=FILTER_BY_USER.id)
 
             transaction.save()
 
-            return Response({"message":MESSAGE, "status_code": 201})
+            return Response({"message":MESSAGE, "status_code": 201, "user_holdings":FILTER_BY_USER.user_holdings})
     else:
         return Response({"message":"Looks like there is an error on our end!", "status_code":500})
 
@@ -204,12 +204,25 @@ def user(request):
 
 @api_view(["POST"])
 def transaction_receipt(request):
-    user_info = request.data
+    DATA_RECIEVED = request.data
+    USER = User.objects.filter(username=DATA_RECIEVED["username"]).first()
+
+    subject = "Do not reply! This is a transaction receipt!"
+    message = f"Thank You, {USER.username}"
+    html_message = f"<h1>Receipt</h1><br/><h3>Company Name {DATA_RECIEVED['companyName']}</h3> <br/> <h3>Company Symbol {DATA_RECIEVED['symbol']}</h3><br/><h3>Amount ${DATA_RECIEVED['investing']}</h3><br/><h3>Total Shares {DATA_RECIEVED['shares']}</h3> <br/> <h3>Buying Power ${USER.user_holdings}</h3> "
+
+
 
     send_mail(
-        user_info["userFullName"],
-        f"From user {user_info['eMail']} \n \n\n{user_info['message']}",
-        user_info["eMail"],
-        [os.environ["ENV_EMAIL"]])
+        subject,
+        message,
+        subject,
+        [USER.email],
+        False,
+        None,
+        None,
+        None,
+        html_message
+        )
 
     return Response(201)
