@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+import django_heroku
+import dj_database_url
 from pathlib import Path
 
 load_dotenv()
@@ -73,7 +75,8 @@ WSGI_APPLICATION = 'django_server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+if DEBUG:
+    DATABASES = {
     'default': {
         'ENGINE': os.environ.get("ENGINE"),
         'NAME': os.environ.get("NAME"),
@@ -81,8 +84,11 @@ DATABASES = {
         'PASSWORD': os.environ.get("PASSWORD"),
         'HOST': os.environ.get("HOST"),
         'PORT': os.environ.get("PORT")
+        }
     }
-}
+else:
+    DATABASES={}
+    DATABASES["default"] = dj_database_url.config(con_max_age=600)
 
 
 # Password validation
@@ -138,7 +144,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:3001","http://localhost:8000","http://127.0.0.1:8000"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000","http://localhost:3001","http://127.0.0.1:8000"]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -146,3 +152,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("EMAIL")
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASSWORD"]
 EMAIL_USE_TLS = True
+
+django_heroku.settings(locals())
