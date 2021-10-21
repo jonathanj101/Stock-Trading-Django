@@ -13,4 +13,4 @@ urlpatterns = [
     path("stocks", user_stock),
     path("search/stock/<str:stock>", stock_data),
     path("transaction-receipt", transaction_receipt)
-    ]
+]
