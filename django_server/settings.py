@@ -8,7 +8,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -25,12 +25,12 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1","stock-trading-django.herokuapp"]
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     "api.apps.ApiConfig",
@@ -89,16 +89,6 @@ if DEBUG:
         }
     }
 else:
-    # DATABASES = {
-    # 'default': {
-    #     'ENGINE': os.environ.get("ENGINE"),
-    #     'NAME': os.environ.get("NAME"),
-    #     'USER': os.environ.get("USER"),
-    #     'PASSWORD': os.environ.get("PASSWORD"),
-    #     'HOST': os.environ.get("HOST"),
-    #     'PORT': os.environ.get("PORT")
-    #     }
-    # }
     DATABASES={}
     DATABASES["default"] = dj_database_url.config(conn_max_age=600)
 
@@ -142,12 +132,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 REACT_APP_PATH = os.path.join(BASE_DIR,"client")
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(REACT_APP_PATH, 'build/static')] 
-else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-print(STATIC_ROOT)
+STATICFILES_DIRS = [os.path.join(REACT_APP_PATH, 'build/static')] 
+STATIC_ROOT = os.path.join(BASE_DIR, "client/build/static")
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 
 
