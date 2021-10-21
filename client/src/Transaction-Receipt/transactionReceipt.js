@@ -7,7 +7,7 @@ const transactionReceipt = async (
     amount,
     shares,
 ) => {
-    axios.post('http://127.0.0.1:8000/api/transaction-receipt', {
+    axios.post('api/transaction-receipt', {
         username: username,
         companyName,
         symbol: symbol,
