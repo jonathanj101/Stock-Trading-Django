@@ -24,16 +24,12 @@ const SearchComponent = () => {
     };
 
     const sendRequestOnTextInput = async (textInput) => {
-        const response = await axios.get(
-            `http://127.0.0.1:8000/api/search/${textInput}`,
-        );
+        const response = await axios.get(`api/search/${textInput}`);
         setStocks(response.data);
     };
 
     const requestStockData = async (stock) => {
-        const response = await axios.get(
-            `http://127.0.0.1:8000/api/search/stock/${stock}`,
-        );
+        const response = await axios.get(`api/search/stock/${stock}`);
         setStockPrice(response.data.cost);
     };
 
