@@ -16,12 +16,9 @@ export const StockChart = ({ isSelling, setIsSelling }) => {
                 localStorage.getItem('username'),
             );
             const fetchHistory = async () => {
-                const response = await axios.put(
-                    `http://127.0.0.1:8000/api/stocks`,
-                    {
-                        username: localStorageUsername,
-                    },
-                );
+                const response = await axios.put(`api/stocks`, {
+                    username: localStorageUsername,
+                });
                 if (isMountedComponent) {
                     setData(response.data.data);
                     setTotalInvesting(response.data.investing);
