@@ -10,9 +10,7 @@ const News = () => {
         let isMountedComponent = true;
         const fetchNews = async () => {
             if (isNews === false) {
-                const response = await axios.get(
-                    'http://127.0.0.1:8000/api/news',
-                );
+                const response = await axios.get('api/news');
                 if (isMountedComponent) {
                     setIsNews(true);
                     setNews(response.data);
