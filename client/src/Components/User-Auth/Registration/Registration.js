@@ -58,23 +58,20 @@ const FormComponent = ({ handleRegister }) => {
         email,
     ) => {
         try {
-            const response = await axios.put(
-                'http://127.0.0.1:8000/api/signup',
-                {
-                    firstName: firstName,
-                    lastName: lastName,
-                    password: password,
-                    username: username,
-                    email: email,
-                    userHoldings: 100000,
-                },
-            );
+            const response = await axios.put('api/signup', {
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                username: username,
+                email: email,
+                userHoldings: 100000,
+            });
             setShow(true);
             const statusCode = response.data.status_code;
             const message = response.data.message;
 
             if (statusCode <= 201) {
-                await axios.post('http://127.0.0.1:8000/api/signup', {
+                await axios.post('api/signup', {
                     firstName: firstName,
                     lastName: lastName,
                     password: password,
