@@ -42,16 +42,13 @@ const SellStockModal = ({
     };
 
     const onSellHandler = async () => {
-        const response = await axios.post(
-            'http://127.0.0.1:8000/api/sell-stock',
-            {
-                username: localStorageUsername,
-                companyName: stockName,
-                stockSymbol: stockSymbol,
-                estimatedShares: estimatedShares,
-                userSellingAmount: userSellingAmount,
-            },
-        );
+        const response = await axios.post('api/sell-stock', {
+            username: localStorageUsername,
+            companyName: stockName,
+            stockSymbol: stockSymbol,
+            estimatedShares: estimatedShares,
+            userSellingAmount: userSellingAmount,
+        });
         const message = response.data.message;
         setSuccessMessage(message);
         setShow(true);
