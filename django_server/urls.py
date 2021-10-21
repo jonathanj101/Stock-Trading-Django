@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+import django_server.settings
+print(django_server.settings.TEMPLATES)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
