@@ -29,12 +29,9 @@ const BuyStockModal = ({
         );
         const fetchUserHoldings = async () => {
             try {
-                const response = await axios.put(
-                    'http://127.0.0.1:8000/api/user',
-                    {
-                        username: localStorageUsername,
-                    },
-                );
+                const response = await axios.put('api/user', {
+                    username: localStorageUsername,
+                });
                 if (isMountedComponent) {
                     setUserHoldings(response.data.user_holdings);
                 }
@@ -66,7 +63,7 @@ const BuyStockModal = ({
         );
         const parsed = stockPrice;
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/buy', {
+            const response = await axios.post('api/buy', {
                 username: localStorageUsername,
                 companyName: stockName,
                 stockCost: parsed,
