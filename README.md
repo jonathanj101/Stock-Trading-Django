@@ -8,6 +8,7 @@
     - Updating users with news articles on their Home/Trade/Summary pages
     - And an e-mail receipt of each transactions made, sent directly to the user's email account.
 
+[View Deployment](https://stock-trading-django.herokuapp.com)
 
 ## Report or Summary page
 
