@@ -32,7 +32,7 @@ class App extends Component {
         );
         if (localStorageUsername !== null) {
             const response = await axios
-                .put('http://127.0.0.1:8000/api/user', {
+                .put('api/user', {
                     username: localStorageUsername,
                 })
                 .then((data) => {
